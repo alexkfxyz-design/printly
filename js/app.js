@@ -9,12 +9,12 @@ const AREAS = {
   cap:     {frente:[120,118,60,46,'front'], lateral:[194,138,28,30,'front']},
   bag:     {frente:[100,150,100,110,'front'], reverso:[100,150,100,110,'back']}
 };
-const SHAPES = {tee:'Polo',hoodie:'Polera',mug:'Taza',beer:'Jarro de vidrio',tumbler:'Tomatodo',keychain:'Llavero',cap:'Gorra',bag:'Tote bag'};
+const SHAPES = {tee:'Playera',hoodie:'Sudadera',mug:'Taza',beer:'Tarro de vidrio',tumbler:'Termo',keychain:'Llavero',cap:'Gorra',bag:'Tote bag'};
 const AREA_NAMES = {frente:'Frente',espalda:'Espalda',reverso:'Reverso',manga_izq:'Manga izquierda',manga_der:'Manga derecha',lateral:'Lateral'};
 const STATUSES = [
   ['recibido','Recibido','info'],['revision','Diseño en revisión','warn'],['aprobado','Aprobado','info'],
   ['produccion','En producción','accent'],['listo','Listo para entregar','ok'],['entregado','Entregado','muted'],['cancelado','Cancelado','bad']];
-const PAY = {pendiente:['Pago pendiente','warn'],adelanto:['Adelanto recibido','info'],pagado:['Pagado','ok']};
+const PAY = {pendiente:['Pago pendiente','warn'],adelanto:['Anticipo recibido','info'],pagado:['Pagado','ok']};
 const FONTS = {script:{label:'Manuscrita',family:'Caveat, cursive',scale:1.15},block:{label:'Bloque',family:'"Bebas Neue", Impact, sans-serif',scale:1.05},classic:{label:'Clásica',family:'Fraunces, Georgia, serif',scale:.85}};
 
 /* ---------- state ---------- */
@@ -27,13 +27,13 @@ const app = document.getElementById('app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rid = () => Math.random().toString(36).slice(2,10);
 const cur = () => S.catalog?.settings?.currency || 'S/';
-const money = n => cur() + ' ' + (Math.round((Number(n)||0)*100)/100).toFixed(2);
+const money = n => { const c = cur(); return c + (c.length>1?' ':'') + (Math.round((Number(n)||0)*100)/100).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); };
 const clone = o => JSON.parse(JSON.stringify(o));
 const lsGet = (k,d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } };
 const lsSet = (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } };
 const byId = (arr,id) => (arr||[]).find(x => x.id === id);
-const fmtDate = t => t ? new Date(t).toLocaleDateString('es-PE',{day:'numeric',month:'short'}) : '—';
-const fmtDateTime = t => t ? new Date(t).toLocaleString('es-PE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+const fmtDate = t => t ? new Date(t).toLocaleDateString('es-MX',{day:'numeric',month:'short'}) : '—';
+const fmtDateTime = t => t ? new Date(t).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
 const statusMeta = k => STATUSES.find(s => s[0]===k) || STATUSES[0];
 const pill = (label,tone) => `<span class="pill t-${tone}">${esc(label)}</span>`;
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2600); }
@@ -186,7 +186,7 @@ function renderBanner(){
 function renderFooter(){
   const st = S.catalog?.settings || {}; const el = document.getElementById('foot'); if (!el) return;
   el.innerHTML = `<div class="wrap foot-in">
-    <div class="foot-brand"><img src="img/logo.webp" alt="Printly"><p>Estampados personalizados en ropa, tazas, tomatodos, jarros y accesorios. Desde una unidad.</p></div>
+    <div class="foot-brand"><img src="img/logo.webp" alt="Printly"><p>Estampados personalizados en playeras, sudaderas, tazas, termos, tarros y accesorios. Desde una pieza. Envíos a todo México.</p></div>
     <div><h4>Tienda</h4><button data-act="go" data-view="shop">Productos</button><button data-act="scrollto" data-to="galeria">Galería</button><button data-act="go" data-view="orders">Mis pedidos</button></div>
     <div><h4>Contacto</h4>${st.whatsapp?`<span>WhatsApp <b class="num">${esc(st.whatsapp)}</b></span>`:'<span>WhatsApp: configúralo en Ajustes</span>'}${st.pickupAddress?`<span>${esc(st.pickupAddress)}</span>`:''}<span>Pagos: ${esc((st.payMethods||[]).slice(0,3).join(', '))}</span></div>
   </div><div class="wrap foot-legal">© ${new Date().getFullYear()} ${esc(st.shopName||'Printly')}</div>`;
@@ -228,14 +228,14 @@ function viewShop(){
   return `
   <section class="hero2">
     <div class="hero-copy">
-      <span class="kicker">Estampados personalizados · desde 1 unidad</span>
+      <span class="kicker">Estampados personalizados · desde 1 pieza</span>
       <h1 class="display">Tu idea, <em>estampada</em> en lo que quieras.</h1>
-      <p class="lead">Polos, poleras, tazas, tomatodos, jarros y llaveros con tu diseño, tu foto o tu nombre. Lo armas aquí y ves cómo queda antes de pedir.</p>
+      <p class="lead">Playeras, sudaderas, tazas, termos, tarros y llaveros con tu diseño, tu foto o tu nombre. Lo armas aquí y ves cómo queda antes de pedir.</p>
       <div class="cta"><button class="btn primary lg" data-act="scrollto" data-to="productos">Personalizar ahora</button><button class="btn lg" data-act="scrollto" data-to="galeria">Ver trabajos</button></div>
       <ul class="trust">
         <li><b>Arte para aprobar</b><span>Antes de imprimir</span></li>
         <li><b>${esc(st.normalDays)} días hábiles</b><span>O ${esc(st.rushDays)} con urgencia</span></li>
-        <li><b>${esc(st.depositPct)}% de adelanto</b><span>${esc((st.payMethods||[]).slice(0,2).join(' o '))}</span></li>
+        <li><b>${esc(st.depositPct)}% de anticipo</b><span>${esc((st.payMethods||[]).slice(0,2).join(' o '))}</span></li>
       </ul>
     </div>
     <div class="collage">
@@ -264,8 +264,8 @@ function viewShop(){
       <ol class="how">
         <li><b>1</b><h3>Elige y personaliza</h3><p>Producto, material, técnica, color y tallas. El precio se calcula al instante.</p></li>
         <li><b>2</b><h3>Sube tu diseño</h3><p>Imagen, foto o solo un nombre. Si no tienes arte, lo diseñamos por ${money(st.designFee)}.</p></li>
-        <li><b>3</b><h3>Aprueba y paga el adelanto</h3><p>Te enviamos el arte final por WhatsApp y confirmas con el ${esc(st.depositPct)}%.</p></li>
-        <li><b>4</b><h3>Recoge o recibe</h3><p>Producción en ${esc(st.normalDays)} días hábiles. Recojo gratis o delivery.</p></li>
+        <li><b>3</b><h3>Aprueba y paga el anticipo</h3><p>Te enviamos el arte final por WhatsApp y confirmas con el ${esc(st.depositPct)}%.</p></li>
+        <li><b>4</b><h3>Recoge o recibe</h3><p>Producción en ${esc(st.normalDays)} días hábiles. Recoges sin costo o te lo enviamos.</p></li>
       </ol>
     </div>
   </section>
@@ -439,23 +439,23 @@ function viewCart(){
     <form class="card" id="checkout" style="display:grid;gap:14px" novalidate>
       <h3>Datos de entrega</h3>
       <label class="f">Nombre completo<input type="text" id="c-name" name="name" required autocomplete="name"></label>
-      <div class="row"><label class="f">Celular / WhatsApp<input type="tel" id="c-phone" name="phone" required autocomplete="tel" placeholder="9XX XXX XXX"></label>
+      <div class="row"><label class="f">Celular / WhatsApp<input type="tel" id="c-phone" name="phone" required autocomplete="tel" placeholder="55 1234 5678"></label>
       <label class="f">Correo <span class="hint">opcional</span><input type="email" id="c-email" name="email" autocomplete="email"></label></div>
       <div class="radio-cards">
-        <button type="button" class="opt" data-act="delivery" data-v="recojo" aria-pressed="${ck.delivery==='recojo'}"><b>Recojo en tienda</b><span>${esc(st.pickupAddress||'Coordinamos el punto de recojo')}</span><em>Gratis</em></button>
-        <button type="button" class="opt" data-act="delivery" data-v="delivery" aria-pressed="${ck.delivery==='delivery'}"><b>Delivery</b><span>${esc(st.deliveryNote)}</span><em>${money(st.deliveryFee)}</em></button>
+        <button type="button" class="opt" data-act="delivery" data-v="recojo" aria-pressed="${ck.delivery==='recojo'}"><b>Recoger en tienda</b><span>${esc(st.pickupAddress||'Te confirmamos la dirección por WhatsApp')}</span><em>Gratis</em></button>
+        <button type="button" class="opt" data-act="delivery" data-v="delivery" aria-pressed="${ck.delivery==='delivery'}"><b>Envío a domicilio</b><span>${esc(st.deliveryNote)}</span><em>${money(st.deliveryFee)}</em></button>
       </div>
-      ${ck.delivery==='delivery' ? `<label class="f">Dirección y referencia<input type="text" id="c-addr" name="address" required autocomplete="street-address"></label>`:''}
+      ${ck.delivery==='delivery' ? `<label class="f">Calle, número, colonia, C.P. y ciudad<input type="text" id="c-addr" name="address" required autocomplete="street-address"></label>`:''}
       <label class="f">Método de pago<select id="c-pay" name="pay">${(st.payMethods||[]).map(m=>`<option>${esc(m)}</option>`).join('')}</select></label>
       <label class="chk"><input type="checkbox" data-act="rush" ${ck.rush?'checked':''}> Pedido urgente: listo en ${esc(st.rushDays)} días hábiles (+${esc(st.rushPct)}%)</label>
       <div style="display:grid;gap:7px">
         <div class="line"><span>Subtotal (${t.qty} u.)</span><span class="num">${money(t.sub)}</span></div>
         ${t.disc?`<div class="line" style="color:var(--ok)"><span>Descuento por volumen ${t.tier.pct}%</span><span class="num">−${money(t.disc)}</span></div>`:''}
         ${t.rush?`<div class="line"><span>Urgencia</span><span class="num">${money(t.rush)}</span></div>`:''}
-        ${t.ship?`<div class="line"><span>Delivery</span><span class="num">${money(t.ship)}</span></div>`:''}
+        ${t.ship?`<div class="line"><span>Envío</span><span class="num">${money(t.ship)}</span></div>`:''}
         <div class="line total"><span>Total</span><span class="num">${money(t.total)}</span></div>
-        <div class="line"><span>Adelanto para confirmar (${esc(st.depositPct)}%)</span><span class="num" style="font-weight:700">${money(t.deposit)}</span></div>
-        <p class="muted" style="font-size:13px">Fecha estimada: ${ready.toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long'})}, contada desde que apruebas el arte.</p>
+        <div class="line"><span>Anticipo para confirmar (${esc(st.depositPct)}%)</span><span class="num" style="font-weight:700">${money(t.deposit)}</span></div>
+        <p class="muted" style="font-size:13px">Fecha estimada: ${ready.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}, contada desde que apruebas el arte. Precios en pesos mexicanos con IVA incluido.</p>
       </div>
       <p class="err" id="c-err" hidden></p>
       <button class="btn primary block" type="submit" ${S.canOrder?'':'disabled'} id="c-submit">Enviar pedido</button>
@@ -467,7 +467,7 @@ async function submitOrder(form){
   const name = (fd.get('name')||'').trim(), phone = (fd.get('phone')||'').trim(), address = (fd.get('address')||'').trim();
   const fail = m => { errEl.textContent = m; errEl.hidden = false; };
   if (!name) return fail('Escribe tu nombre para saber a quién entregar.');
-  if (phone.replace(/\D/g,'').length < 9) return fail('Escribe un celular de 9 dígitos para coordinar por WhatsApp.');
+  if (phone.replace(/\D/g,'').length < 10) return fail('Escribe un celular de 10 dígitos para coordinar por WhatsApp.');
   if (ck.delivery==='delivery' && !address) return fail('Escribe la dirección de entrega.');
   errEl.hidden = true; const btn = document.getElementById('c-submit'); btn.disabled = true; btn.textContent = 'Enviando…';
   const st = S.catalog.settings; const t = totals(S.cart, ck); const now = Date.now(); const d = new Date();
@@ -495,7 +495,7 @@ function viewDone(){
   return `<div class="success">${PAW_SVG}<div class="eyebrow">Pedido recibido</div><h1>¡Gracias, ${esc(o.customer.name.split(' ')[0])}!</h1>
     <p class="muted">Tu código de pedido es</p><div class="code" style="font-size:34px">${esc(o.code)}</div>
     <div class="paybox">
-      <b>Para confirmar, envía el adelanto de ${money(o.deposit)}</b>
+      <b>Para confirmar, envía el anticipo de ${money(o.deposit)}</b>
       <span>Método: ${esc(o.payMethod)}${st.payNumber?` al <b class="num">${esc(st.payNumber)}</b>`:''}${st.payHolder?` a nombre de ${esc(st.payHolder)}`:''}.</span>
       ${st.whatsapp?`<span>Manda la captura con tu código al WhatsApp <b class="num">${esc(st.whatsapp)}</b> <button class="btn sm" data-act="copy" data-text="${esc(st.whatsapp)}">Copiar número</button></span>`:'<span>Te escribiremos por WhatsApp para coordinar el pago y aprobar el arte.</span>'}
       <span class="muted">Total del pedido: ${money(o.total)} · Saldo al entregar: ${money(o.total-o.deposit)}</span>
@@ -554,7 +554,7 @@ function admOrders(){
         <td><b>${esc(o.code)}</b>${o.rush?' <span class="pill t-bad" style="padding:1px 7px">Urgente</span>':''}<div class="muted" style="font-size:12.5px">${fmtDate(o.createdAt)}</div></td>
         <td>${esc(o.customer?.name)}<div class="muted num" style="font-size:12.5px">${esc(o.customer?.phone)}</div></td>
         <td style="font-size:13.5px">${o.items.map(i=>`${esc(i.name)} ×${i.qty}`).join('<br>')}</td>
-        <td class="${late?'late':''}">${fmtDate(o.dueDate+'T12:00')}${late?'<div style="font-size:12px">Atrasado</div>':''}<div class="muted" style="font-size:12.5px;font-weight:400">${o.delivery==='delivery'?'Delivery':'Recojo'}</div></td>
+        <td class="${late?'late':''}">${fmtDate(o.dueDate+'T12:00')}${late?'<div style="font-size:12px">Atrasado</div>':''}<div class="muted" style="font-size:12.5px;font-weight:400">${o.delivery==='delivery'?'Envío':'Recoge en tienda'}</div></td>
         <td>${pill(sm[1], sm[2])}</td><td>${pill(...(PAY[o.payStatus]||PAY.pendiente))}</td>
         <td class="num" style="text-align:right;font-weight:700">${money(o.total)}</td></tr>`; }).join('')}
     </tbody></table></div>` : `<div class="empty card">${PAW_SVG}<p class="muted">${all.length ? 'Ningún pedido coincide con este filtro.' : 'Todavía no llegan pedidos. Cuando un cliente compre, aparecerá aquí.'}</p></div>`}`;
@@ -609,13 +609,13 @@ function admSettings(){
   return `<form id="settings-form" class="two" style="align-items:start">
     <div class="card sect"><h3>Tienda y contacto</h3>
       <label class="f">Nombre de la tienda<input type="text" name="shopName" value="${esc(s.shopName)}"></label>
-      <div class="row"><label class="f">WhatsApp de atención<input type="tel" name="whatsapp" value="${esc(s.whatsapp)}" placeholder="9XX XXX XXX"></label><label class="f">Moneda<input type="text" name="currency" value="${esc(s.currency)}"></label></div>
+      <div class="row"><label class="f">WhatsApp de atención<input type="tel" name="whatsapp" value="${esc(s.whatsapp)}" placeholder="55 1234 5678"></label><label class="f">Moneda<input type="text" name="currency" value="${esc(s.currency)}"></label></div>
       <label class="f">Dirección de recojo<input type="text" name="pickupAddress" value="${esc(s.pickupAddress)}"></label>
-      <div class="row"><label class="f">Costo de delivery<input type="number" step="0.5" name="deliveryFee" value="${esc(s.deliveryFee)}"></label><label class="f">Zona de delivery<input type="text" name="deliveryNote" value="${esc(s.deliveryNote)}"></label></div>
+      <div class="row"><label class="f">Costo de envío<input type="number" step="0.5" name="deliveryFee" value="${esc(s.deliveryFee)}"></label><label class="f">Cobertura de envío<input type="text" name="deliveryNote" value="${esc(s.deliveryNote)}"></label></div>
       <h3 style="margin-top:8px">Pagos</h3>
       <label class="f">Métodos de pago <span class="hint">uno por línea</span><textarea name="payMethods">${esc((s.payMethods||[]).join('\n'))}</textarea></label>
-      <div class="row"><label class="f">Número Yape / Plin / cuenta<input type="text" name="payNumber" value="${esc(s.payNumber)}"></label><label class="f">Titular<input type="text" name="payHolder" value="${esc(s.payHolder)}"></label></div>
-      <label class="f">Adelanto para confirmar (%)<input type="number" name="depositPct" min="0" max="100" value="${esc(s.depositPct)}"></label></div>
+      <div class="row"><label class="f">CLABE, cuenta o tarjeta para depósitos<input type="text" name="payNumber" value="${esc(s.payNumber)}"></label><label class="f">Titular<input type="text" name="payHolder" value="${esc(s.payHolder)}"></label></div>
+      <label class="f">Anticipo para confirmar (%)<input type="number" name="depositPct" min="0" max="100" value="${esc(s.depositPct)}"></label></div>
     <div class="card sect"><h3>Producción y precios</h3>
       <div class="row"><label class="f">Días hábiles normales<input type="number" name="normalDays" min="1" value="${esc(s.normalDays)}"></label><label class="f">Días con urgencia<input type="number" name="rushDays" min="1" value="${esc(s.rushDays)}"></label></div>
       <div class="row"><label class="f">Recargo por urgencia (%)<input type="number" name="rushPct" min="0" value="${esc(s.rushPct)}"></label><label class="f">Servicio de diseño (por modelo)<input type="number" step="0.5" name="designFee" min="0" value="${esc(s.designFee)}"></label></div>
@@ -640,7 +640,7 @@ function orderModal(o){
   <div class="card" style="display:grid;gap:6px"><h3>${esc(o.customer?.name)}</h3>
     <span class="copy num">${esc(o.customer?.phone)} <button class="btn sm ghost" data-act="copy" data-text="${esc(o.customer?.phone)}">Copiar</button></span>
     ${o.customer?.email?`<span>${esc(o.customer.email)}</span>`:''}
-    <span>${o.delivery==='delivery'?`Delivery: ${esc(o.address)}`:'Recojo en tienda'} · Paga con ${esc(o.payMethod)}</span></div>
+    <span>${o.delivery==='delivery'?`Envío a: ${esc(o.address)}`:'Recoge en tienda'} · Paga con ${esc(o.payMethod)}</span></div>
   ${o.items.map(i => `<div class="card" style="display:grid;gap:10px">
     <div style="display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;align-items:start"><div style="background:var(--surface-2);border-radius:10px">${mockSVG(i,'front')}</div>
     <div style="display:grid;gap:3px;font-size:14px"><h3>${esc(i.name)} ×${i.qty}</h3>
@@ -656,14 +656,14 @@ function orderModal(o){
     <div class="line"><span>Subtotal</span><span class="num">${money(o.sub)}</span></div>
     ${o.disc?`<div class="line"><span>Descuento ${o.discPct}%</span><span class="num">−${money(o.disc)}</span></div>`:''}
     ${o.rushFee?`<div class="line"><span>Urgencia</span><span class="num">${money(o.rushFee)}</span></div>`:''}
-    ${o.ship?`<div class="line"><span>Delivery</span><span class="num">${money(o.ship)}</span></div>`:''}
+    ${o.ship?`<div class="line"><span>Envío</span><span class="num">${money(o.ship)}</span></div>`:''}
     <div class="line total"><span>Total</span><span class="num">${money(o.total)}</span></div>
     <div class="line"><span>Pagado</span><span class="num">${money(o.paid)} · saldo ${money(o.total-(o.paid||0))}</span></div></div>
   <form id="order-form" class="card" style="display:grid;gap:12px" data-uid="${esc(o._uid)}" data-oid="${esc(o._id||o.id)}"><h3>Gestionar</h3>
     <div class="row"><label class="f">Estado<select name="status" id="o-status">${STATUSES.map(s=>`<option value="${s[0]}" ${o.status===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select></label>
       <label class="f">Fecha de entrega<input type="date" name="dueDate" id="o-due" value="${esc(o.dueDate)}"></label></div>
-    <div class="row"><label class="f">Monto pagado (${esc(cur())})<input type="number" step="0.1" min="0" name="paid" id="o-paid" value="${esc(o.paid||0)}"></label>
-      <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap"><button type="button" class="btn sm" data-act="setpaid" data-v="${o.deposit}">Adelanto ${money(o.deposit)}</button><button type="button" class="btn sm" data-act="setpaid" data-v="${o.total}">Total</button></div></div>
+    <div class="row"><label class="f">Monto pagado (${esc(cur())} MXN)<input type="number" step="0.1" min="0" name="paid" id="o-paid" value="${esc(o.paid||0)}"></label>
+      <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap"><button type="button" class="btn sm" data-act="setpaid" data-v="${o.deposit}">Anticipo ${money(o.deposit)}</button><button type="button" class="btn sm" data-act="setpaid" data-v="${o.total}">Total</button></div></div>
     <label class="f">Notas internas<textarea name="adminNotes" id="o-notes" placeholder="Solo las ve el equipo">${esc(o.adminNotes)}</textarea></label>
     <button class="btn primary" type="submit">Guardar pedido</button></form>
   <div class="hist"><h3>Historial</h3>${(o.history||[]).slice().reverse().map(h=>`<div><span class="muted num" style="min-width:120px">${fmtDateTime(h.at)}</span><span>${esc(statusMeta(h.status)[1])}</span></div>`).join('')}</div>`;

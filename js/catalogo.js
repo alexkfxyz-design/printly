@@ -1,7 +1,8 @@
-// Catálogo inicial de la tienda. Se carga la primera vez; luego los cambios del panel se guardan en el navegador.
+// Catálogo inicial de la tienda (precios en MXN, IVA incluido). Se carga la primera vez; luego los cambios del panel se guardan en el navegador.
 // Para agregar fotos a un producto, pon la imagen en img/productos/ y añade su ruta en "photos" (la primera es la portada).
+// Si editas este archivo, sube el número de "version" para que los navegadores carguen el catálogo nuevo.
 const DEFAULT_CATALOG = {
-  "version": 2,
+  "version": 3,
   "categories": [
     {
       "id": "ropa",
@@ -9,7 +10,7 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "tazas",
-      "name": "Tazas y vasos"
+      "name": "Tazas, termos y tarros"
     },
     {
       "id": "accesorios",
@@ -86,31 +87,31 @@ const DEFAULT_CATALOG = {
     {
       "id": "dtf",
       "name": "DTF textil",
-      "add": 5,
+      "add": 30,
       "desc": "Full color sobre cualquier color de prenda. Resiste bien el lavado."
     },
     {
       "id": "vinil",
       "name": "Vinil",
-      "add": 3,
+      "add": 20,
       "desc": "Nombres, frases y logos de 1 o 2 colores sólidos."
     },
     {
       "id": "serigrafia",
       "name": "Serigrafía",
       "add": 0,
-      "desc": "La opción más económica en volumen (desde 12 unidades)."
+      "desc": "La opción más económica en volumen (desde 12 piezas)."
     },
     {
       "id": "bordado",
       "name": "Bordado",
-      "add": 10,
+      "add": 60,
       "desc": "Acabado premium y muy duradero, ideal para logos."
     },
     {
       "id": "uvdtf",
       "name": "UV DTF",
-      "add": 6,
+      "add": 35,
       "desc": "Sticker full color para vidrio, acero y acrílico."
     },
     {
@@ -123,7 +124,7 @@ const DEFAULT_CATALOG = {
   "materials": [
     {
       "id": "alg-peinado",
-      "name": "Algodón peinado 30/1",
+      "name": "Algodón 100% peinado",
       "add": 0,
       "desc": "Suave y fresco. El más pedido.",
       "techs": [
@@ -135,9 +136,9 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "alg-pima",
-      "name": "Algodón pima",
-      "add": 12,
-      "desc": "Fibra larga peruana, más suave y durable.",
+      "name": "Algodón premium heavyweight",
+      "add": 60,
+      "desc": "Tela gruesa de 220 g, más suave y durable.",
       "techs": [
         "dtf",
         "vinil",
@@ -148,8 +149,8 @@ const DEFAULT_CATALOG = {
     {
       "id": "poliester",
       "name": "Poliéster dry-fit",
-      "add": -3,
-      "desc": "Deportivo y liviano. Perfecto para sublimación.",
+      "add": -15,
+      "desc": "Deportivo y ligero. Perfecto para sublimación.",
       "techs": [
         "sublimacion",
         "dtf",
@@ -158,9 +159,9 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "franela",
-      "name": "Franela french terry",
+      "name": "Felpa perchada",
       "add": 0,
-      "desc": "Abrigadora por dentro, ideal para poleras.",
+      "desc": "Calientita por dentro, ideal para sudaderas.",
       "techs": [
         "dtf",
         "vinil",
@@ -180,7 +181,7 @@ const DEFAULT_CATALOG = {
     {
       "id": "magica",
       "name": "Cerámica mágica",
-      "add": 10,
+      "add": 60,
       "desc": "Negra en frío; el diseño aparece con la bebida caliente.",
       "techs": [
         "sublimacion"
@@ -190,7 +191,7 @@ const DEFAULT_CATALOG = {
       "id": "vidrio",
       "name": "Vidrio transparente",
       "add": 0,
-      "desc": "Jarro grueso de 400 ml.",
+      "desc": "Tarro grueso de 400 ml.",
       "techs": [
         "vinil",
         "uvdtf"
@@ -220,17 +221,17 @@ const DEFAULT_CATALOG = {
     {
       "id": "mdf",
       "name": "MDF sublimable",
-      "add": 1,
-      "desc": "Liviano, impreso a todo color.",
+      "add": 5,
+      "desc": "Ligero, impreso a todo color.",
       "techs": [
         "sublimacion"
       ]
     },
     {
       "id": "drill",
-      "name": "Drill de algodón",
+      "name": "Gabardina de algodón",
       "add": 0,
-      "desc": "Gorra de 6 paneles con regulador.",
+      "desc": "Gorra de 6 paneles con ajustador.",
       "techs": [
         "bordado",
         "dtf",
@@ -239,7 +240,7 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "lona",
-      "name": "Lona de algodón",
+      "name": "Manta de algodón",
       "add": 0,
       "desc": "Resistente, asas largas.",
       "techs": [
@@ -252,10 +253,10 @@ const DEFAULT_CATALOG = {
   "products": [
     {
       "id": "polo-oversize",
-      "name": "Polo oversize",
+      "name": "Playera oversize",
       "cat": "ropa",
       "shape": "tee",
-      "base": 35,
+      "base": 260,
       "minQty": 1,
       "active": true,
       "desc": "Hombro caído y tela gruesa. Para diseños grandes en la espalda.",
@@ -287,7 +288,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "espalda",
           "label": "Espalda",
-          "extra": 10
+          "extra": 60
         }
       ],
       "photos": [
@@ -301,10 +302,10 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "polo-clasico",
-      "name": "Polo clásico",
+      "name": "Playera clásica",
       "cat": "ropa",
       "shape": "tee",
-      "base": 25,
+      "base": 180,
       "minQty": 1,
       "active": true,
       "desc": "Corte regular, cuello redondo. El lienzo de siempre.",
@@ -343,17 +344,17 @@ const DEFAULT_CATALOG = {
         {
           "key": "espalda",
           "label": "Espalda",
-          "extra": 8
+          "extra": 50
         },
         {
           "key": "manga_izq",
           "label": "Manga izquierda",
-          "extra": 4
+          "extra": 30
         },
         {
           "key": "manga_der",
           "label": "Manga derecha",
-          "extra": 4
+          "extra": 30
         }
       ],
       "photos": [
@@ -364,10 +365,10 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "tomatodo",
-      "name": "Tomatodo térmico 20 oz",
+      "name": "Termo de acero 20 oz",
       "cat": "tazas",
       "shape": "tumbler",
-      "base": 45,
+      "base": 320,
       "minQty": 1,
       "active": true,
       "desc": "Con tapa y doble pared. Regalo corporativo favorito.",
@@ -391,7 +392,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "reverso",
           "label": "Reverso",
-          "extra": 5
+          "extra": 40
         }
       ],
       "photos": [
@@ -405,10 +406,10 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "jarro",
-      "name": "Jarro cervecero",
+      "name": "Tarro cervecero",
       "cat": "tazas",
       "shape": "beer",
-      "base": 22,
+      "base": 160,
       "minQty": 1,
       "active": true,
       "desc": "Vidrio grueso con asa. Ideal para nombres.",
@@ -439,10 +440,10 @@ const DEFAULT_CATALOG = {
       "name": "Llavero",
       "cat": "accesorios",
       "shape": "keychain",
-      "base": 6,
+      "base": 45,
       "minQty": 1,
       "active": true,
-      "desc": "Con tu foto, logo o el de tu idol favorito.",
+      "desc": "Con tu foto, tu logo o tu frase favorita.",
       "mats": [
         "acrilico",
         "mdf"
@@ -459,7 +460,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "reverso",
           "label": "Reverso",
-          "extra": 1.5
+          "extra": 10
         }
       ],
       "photos": [
@@ -470,13 +471,13 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "polera",
-      "name": "Polera con capucha",
+      "name": "Sudadera con capucha",
       "cat": "ropa",
       "shape": "hoodie",
-      "base": 65,
+      "base": 450,
       "minQty": 1,
       "active": true,
-      "desc": "Bolsillo canguro y capucha forrada.",
+      "desc": "Bolsa canguro y gorro forrado.",
       "mats": [
         "franela"
       ],
@@ -505,17 +506,17 @@ const DEFAULT_CATALOG = {
         {
           "key": "espalda",
           "label": "Espalda",
-          "extra": 10
+          "extra": 60
         },
         {
           "key": "manga_izq",
           "label": "Manga izquierda",
-          "extra": 5
+          "extra": 35
         },
         {
           "key": "manga_der",
           "label": "Manga derecha",
-          "extra": 5
+          "extra": 35
         }
       ],
       "photos": [],
@@ -526,7 +527,7 @@ const DEFAULT_CATALOG = {
       "name": "Taza 11 oz",
       "cat": "tazas",
       "shape": "mug",
-      "base": 15,
+      "base": 120,
       "minQty": 1,
       "active": true,
       "desc": "La clásica de regalo. Diseño a uno o ambos lados.",
@@ -546,7 +547,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "reverso",
           "label": "Lado izquierdo",
-          "extra": 3
+          "extra": 20
         }
       ],
       "photos": [],
@@ -557,10 +558,10 @@ const DEFAULT_CATALOG = {
       "name": "Gorra",
       "cat": "accesorios",
       "shape": "cap",
-      "base": 22,
+      "base": 180,
       "minQty": 1,
       "active": true,
-      "desc": "Seis paneles, visera curva y regulador.",
+      "desc": "Seis paneles, visera curva y ajustador.",
       "mats": [
         "drill"
       ],
@@ -582,7 +583,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "lateral",
           "label": "Lateral",
-          "extra": 5
+          "extra": 35
         }
       ],
       "photos": [],
@@ -593,10 +594,10 @@ const DEFAULT_CATALOG = {
       "name": "Tote bag",
       "cat": "accesorios",
       "shape": "bag",
-      "base": 18,
+      "base": 150,
       "minQty": 1,
       "active": true,
-      "desc": "Bolsa de lona para el día a día.",
+      "desc": "Bolsa de manta para el día a día.",
       "mats": [
         "lona"
       ],
@@ -615,7 +616,7 @@ const DEFAULT_CATALOG = {
         {
           "key": "reverso",
           "label": "Reverso",
-          "extra": 6
+          "extra": 40
         }
       ],
       "photos": [],
@@ -624,22 +625,22 @@ const DEFAULT_CATALOG = {
   ],
   "settings": {
     "shopName": "Printly",
-    "currency": "S/",
+    "currency": "$",
     "whatsapp": "",
     "payNumber": "",
     "payHolder": "",
     "pickupAddress": "",
-    "deliveryFee": 10,
-    "deliveryNote": "Envío dentro de la ciudad",
+    "deliveryFee": 99,
+    "deliveryNote": "Envío local o por paquetería a todo México",
     "normalDays": 5,
     "rushDays": 2,
     "rushPct": 25,
     "depositPct": 50,
-    "designFee": 15,
+    "designFee": 100,
     "payMethods": [
-      "Yape",
-      "Plin",
-      "Transferencia bancaria",
+      "Transferencia SPEI",
+      "Depósito en OXXO",
+      "Tarjeta de débito o crédito",
       "Efectivo al recoger"
     ],
     "discounts": [

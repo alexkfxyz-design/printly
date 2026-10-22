@@ -16,10 +16,10 @@ No necesita servidor, base de datos ni instalación. Es HTML, CSS y JavaScript p
 ## Qué incluye
 
 **Tienda (cliente)**
-- Catálogo por categorías: polos, poleras, tazas, jarros, tomatodos, llaveros, gorras y tote bags.
+- Catálogo por categorías: playeras, sudaderas, tazas, tarros, termos, llaveros, gorras y tote bags. Precios en MXN con IVA incluido.
 - Personalizador: material, técnica de impresión (solo las compatibles con el material), color, zonas de impresión, subida de diseño por zona, texto o nombre, tallas y cantidades.
 - Vista previa en vivo del producto con el color y el diseño, en vista frontal y posterior.
-- Carrito y checkout: recojo o delivery, método de pago, pedido urgente, descuento por volumen y adelanto.
+- Carrito y checkout: recoger en tienda o envío a domicilio, método de pago (SPEI, OXXO, tarjeta, efectivo), pedido urgente, descuento por volumen y anticipo.
 - "Mis pedidos" con el avance de cada pedido.
 
 **Panel de administración** (menú *Administrar*)
@@ -27,7 +27,7 @@ No necesita servidor, base de datos ni instalación. Es HTML, CSS y JavaScript p
 - Productos: crear, editar, duplicar, ocultar y eliminar.
 - Materiales y técnicas, con sus recargos y compatibilidades.
 - Categorías, colores y tallas.
-- Ajustes: WhatsApp, Yape/Plin, delivery, días de producción, urgencia, adelanto y descuentos.
+- Ajustes: WhatsApp, datos para depósito (CLABE/cuenta), costo de envío, días de producción, urgencia, anticipo y descuentos.
 
 ## Importante
 
