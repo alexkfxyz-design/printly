@@ -26,7 +26,7 @@ export default function Legal({ kind }) {
       </ul>
       <p>No usamos tus datos con fines publicitarios sin tu consentimiento ni los vendemos a terceros.</p>
       <h2>Con quién los compartimos</h2>
-      <p>Solo con proveedores necesarios para operar: la plataforma de pagos (Mercado Pago) cuando pagas en línea, la paquetería cuando eliges envío, y el proveedor de infraestructura donde se almacena la tienda (Google Firebase).</p>
+      <p>Solo con proveedores necesarios para operar: las plataformas de pago (PayPal o Mercado Pago) cuando pagas en línea, la paquetería cuando eliges envío, y el proveedor de infraestructura donde se almacena la tienda (Google Firebase).</p>
       <h2>Tus diseños</h2>
       <p>Las imágenes que subes se usan solo para producir tu pedido. Al subirlas confirmas que tienes derecho a usarlas. Solo las mostraremos como ejemplo de nuestro trabajo si nos das permiso.</p>
       <h2>Derechos ARCO</h2>
@@ -50,7 +50,7 @@ export default function Legal({ kind }) {
       <h2>Precios y pagos</h2>
       <ul>
         <li>Los precios están en pesos mexicanos (MXN) e incluyen IVA.</li>
-        <li>Puedes pagar el total en línea con Mercado Pago, o confirmar con un anticipo del {st.depositPct}% por transferencia u OXXO y liquidar al entregar.</li>
+        <li>Puedes pagar el total en línea con PayPal (cuenta o tarjeta), o confirmar con un anticipo del {st.depositPct}% por transferencia y liquidar al entregar.</li>
         <li>El pedido entra a producción cuando se acredita el pago o el anticipo.</li>
       </ul>
       <h2>Tiempos de entrega</h2>

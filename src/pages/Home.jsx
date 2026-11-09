@@ -81,7 +81,7 @@ export default function Home() {
           <ul className="trust">
             <li><b>Arte para aprobar</b><span>Antes de imprimir</span></li>
             <li><b>{st.normalDays} días hábiles</b><span>O {st.rushDays} con urgencia</span></li>
-            <li><b>Paga como prefieras</b><span>Transferencia, OXXO o en línea</span></li>
+            <li><b>Paga como prefieras</b><span>Transferencia o PayPal</span></li>
           </ul>
         </div>
         <div className="collage">
@@ -125,7 +125,7 @@ export default function Home() {
           <ol className="how">
             <li><b>1</b><h3>Elige y personaliza</h3><p>Producto, material, técnica, color y tallas. El precio se calcula al instante.</p></li>
             <li><b>2</b><h3>Sube tu diseño</h3><p>Imagen, foto o solo un nombre. Si no tienes arte, lo diseñamos por {money(st.designFee)}.</p></li>
-            <li><b>3</b><h3>Paga y aprueba</h3><p>{st.onlinePay ? 'Paga en línea con tarjeta u OXXO, o deja un anticipo por transferencia.' : `Confirma con el ${st.depositPct}% de anticipo.`} Te enviamos el arte para aprobar.</p></li>
+            <li><b>3</b><h3>Paga y aprueba</h3><p>Paga en línea con PayPal o deja un anticipo por transferencia. Te enviamos el arte para aprobar.</p></li>
             <li><b>4</b><h3>Recoge o recibe</h3><p>Producción en {st.normalDays} días hábiles. Recoges sin costo o te lo enviamos.</p></li>
           </ol>
         </div>

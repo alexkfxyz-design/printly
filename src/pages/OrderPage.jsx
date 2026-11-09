@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
-import { onlinePayAvailable, startOnlinePayment, subscribeOrder } from '../lib/db.js';
+import { getPayConfig, startOnlinePayment, subscribeOrder } from '../lib/db.js';
+import PayPalButton from '../components/PayPalButton.jsx';
 import { fmtDate, PAY, STATUSES, waLink } from '../lib/format.js';
 import Mockup from '../components/Mockup.jsx';
 import { Empty, Loading, Paw, Pill, useMoney, useTitle } from '../components/ui.jsx';
@@ -29,8 +30,10 @@ export default function OrderPage() {
   const money = useMoney();
   const [o, setO] = useState(undefined);
   const [paying, setPaying] = useState(false);
-  const [mpReady, setMpReady] = useState(false);
-  useEffect(() => { onlinePayAvailable().then(setMpReady); }, []);
+  const [pc, setPc] = useState({ mercadopago: false, paypal: false });
+  const [showTransfer, setShowTransfer] = useState(false);
+  useEffect(() => { getPayConfig().then(setPc); }, []);
+  const onPaid = useCallback(() => toast('¡Pago recibido! Gracias.'), [toast]);
   useTitle(o ? `Pedido ${o.code}` : 'Tu pedido');
 
   useEffect(() => {
@@ -89,7 +92,14 @@ export default function OrderPage() {
         <div className="paybox">
           {paid ? (
             <><h3>Todo listo</h3><p>Recibimos tu pago. Te escribiremos por WhatsApp para enviarte el arte final y avisarte cuando esté listo.</p></>
-          ) : o.payChoice === 'online' && mpReady ? (
+          ) : o.payChoice === 'paypal' && pc.paypal && st.paypalPay !== false && !showTransfer ? (
+            <>
+              <h3>Paga con PayPal</h3>
+              <p>Paga <b>{money(o.total)}</b> con tu cuenta PayPal o con tarjeta de crédito o débito. Tu pedido entra a producción en cuanto se acredite.</p>
+              <PayPalButton orderId={o.id} clientId={pc.paypalClientId} onPaid={onPaid} />
+              {st.transferPay !== false && <button className="btn ghost sm" onClick={() => setShowTransfer(true)}>Prefiero pagar por transferencia</button>}
+            </>
+          ) : o.payChoice === 'online' && pc.mercadopago && !showTransfer ? (
             <>
               <h3>Paga en línea</h3>
               <p>Paga {money(o.total)} con tarjeta, OXXO o saldo de Mercado Pago. Tu pedido entra a producción en cuanto se acredite.</p>
@@ -98,7 +108,7 @@ export default function OrderPage() {
           ) : (
             <>
               <h3>Confirma con tu anticipo</h3>
-              <p>Envía <b>{money(o.deposit)}</b> por {o.payMethod}{st.payNumber ? <> a la cuenta <b className="num">{st.payNumber}</b></> : ''}{st.payHolder ? ` a nombre de ${st.payHolder}` : ''}.</p>
+              <p>Envía <b>{money(o.deposit)}</b> por {['PayPal', 'Mercado Pago'].includes(o.payMethod) ? 'transferencia' : o.payMethod}{st.payNumber ? <> a la cuenta <b className="num">{st.payNumber}</b></> : ''}{st.payHolder ? ` a nombre de ${st.payHolder}` : ''}.</p>
               <p className="muted small">Saldo al entregar: {money(o.total - o.deposit)}</p>
             </>
           )}

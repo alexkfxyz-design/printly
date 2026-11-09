@@ -56,6 +56,7 @@ function OrderDetail({ o, onClose }) {
         <span>{o.delivery === 'envio' ? `Envío a: ${o.address}` : 'Recoge en tienda'}</span>
         {o.notes && <span><b>Comentarios:</b> {o.notes}</span>}
         {o.mp?.paymentId && <span className="muted small">Mercado Pago #{o.mp.paymentId} · {o.mp.status}</span>}
+        {o.paypal?.captureId && <span className="muted small">PayPal #{o.paypal.captureId} · {o.paypal.status}{o.paypal.payer ? ` · ${o.paypal.payer}` : ''}</span>}
       </div>
       {o.items.map((i, k) => (
         <div className="card stack-sm" key={k}>

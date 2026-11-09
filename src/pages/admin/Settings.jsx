@@ -17,13 +17,13 @@ export default function Settings() {
 
   async function submit(e) {
     e.preventDefault();
-    if (s.onlinePay === false && s.transferPay === false) return toast('Deja activo al menos un método de pago.');
+    if (s.onlinePay === false && s.transferPay === false && s.paypalPay === false) return toast('Deja activo al menos un método de pago.');
     const c = clone(catalog);
     const st = c.settings;
     TEXT.forEach((k) => { st[k] = String(s[k] ?? '').trim(); });
     NUM.forEach((k) => { st[k] = Math.max(0, Number(s[k]) || 0); });
     st.instagram = st.instagram.replace(/^@/, ''); st.tiktok = st.tiktok.replace(/^@/, '');
-    st.onlinePay = s.onlinePay !== false; st.transferPay = s.transferPay !== false;
+    st.onlinePay = s.onlinePay !== false; st.transferPay = s.transferPay !== false; st.paypalPay = s.paypalPay !== false;
     st.payMethods = s.payMethodsText.split('\n').map((x) => x.trim()).filter(Boolean);
     st.discounts = s.discounts.map((d) => ({ qty: Number(d.qty), pct: Number(d.pct) })).filter((d) => d.qty > 0 && d.pct > 0).sort((a, b) => a.qty - b.qty);
     await save(c, 'Ajustes guardados');
@@ -65,8 +65,10 @@ export default function Settings() {
       </div>
       <div className="card stack">
         <h3>Pagos</h3>
+        <label className="chk"><input type="checkbox" {...chk('paypalPay')} /> Pago en línea con PayPal (cuenta PayPal o tarjeta)</label>
         <label className="chk"><input type="checkbox" {...chk('onlinePay')} /> Pago en línea con Mercado Pago (tarjeta, OXXO, saldo)</label>
-        <label className="chk"><input type="checkbox" {...chk('transferPay')} /> Anticipo por transferencia u OXXO</label>
+        <label className="chk"><input type="checkbox" {...chk('transferPay')} /> Anticipo por transferencia o depósito</label>
+        <p className="muted small">Los pagos en línea solo se muestran a los clientes cuando sus claves están configuradas en Netlify.</p>
         <label className="f">Métodos para el anticipo <span className="hint">uno por línea</span><textarea {...f('payMethodsText')} /></label>
         <div className="row">
           <label className="f">CLABE, cuenta o tarjeta<input type="text" {...f('payNumber')} /></label>

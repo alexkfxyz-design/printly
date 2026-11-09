@@ -5,7 +5,7 @@ Tienda en línea de **Printly** ([@soyprintly.mx](https://instagram.com/soyprint
 - Los clientes personalizan playeras, sudaderas, tazas, termos, tarros, tote bags, llaveros e impresiones. Ven el resultado en vivo y pagan en línea con **Mercado Pago** o dejan un anticipo por transferencia/OXXO.
 - La dueña gestiona pedidos, productos, precios y ajustes desde un **panel de administración**.
 
-**Stack:** React 18 + Vite · Firebase (Firestore + Authentication) · Netlify (hosting + Functions) · Mercado Pago Checkout Pro.
+**Stack:** React 18 + Vite · Firebase (Firestore + Authentication) · Netlify (hosting + Functions) · PayPal Checkout (y Mercado Pago opcional).
 
 Sin variables de Firebase el sitio arranca en **modo demo**: todo se guarda en el navegador. Sirve para mostrarlo al cliente antes de conectar los servicios reales.
 
@@ -42,7 +42,21 @@ Para probar también las funciones de Mercado Pago en local: `npm i -g netlify-c
    - Windows (PowerShell): `[Convert]::ToBase64String([IO.File]::ReadAllBytes("ruta\clave.json")) | Set-Clipboard`
    - Mac/Linux: `base64 -i clave.json | pbcopy`
 
-### 2. Mercado Pago (~5 min)
+### 2. PayPal (~10 min)
+1. La dueña necesita una cuenta **PayPal Business**. Desde una cuenta personal se cambia gratis en *Configuración → Cambiar a cuenta empresarial*.
+2. Entra a https://developer.paypal.com con esa cuenta → **Apps & Credentials**.
+3. Arriba elige **Live** → **Create App** (nombre: `Printly web`, tipo *Merchant*).
+4. Copia el **Client ID** y el **Secret**.
+5. En Netlify agrega:
+   - `PAYPAL_CLIENT_ID`
+   - `PAYPAL_CLIENT_SECRET`
+   - `PAYPAL_ENV=live`
+   - `FIREBASE_SERVICE_ACCOUNT_BASE64` (ver paso 1.8)
+6. Redespliega. El botón **Pagar con PayPal** aparece solo en el checkout.
+
+> Para probar sin cobrar: en el paso 3 usa la pestaña **Sandbox**, pon `PAYPAL_ENV=sandbox` y paga con las cuentas de prueba de *Sandbox → Accounts*.
+
+### 2b. Mercado Pago (opcional)
 1. La dueña entra a https://www.mercadopago.com.mx/developers con su cuenta de Mercado Pago.
 2. *Tus integraciones → Crear aplicación* (tipo: pagos en línea, Checkout Pro).
 3. *Credenciales de producción*: copia el **Access Token** (`APP_USR-…`).
@@ -66,7 +80,9 @@ Para probar también las funciones de Mercado Pago en local: `npm i -g netlify-c
 | `VITE_FIREBASE_API_KEY` … `VITE_FIREBASE_APP_ID` | Los 6 valores de `firebaseConfig` |
 | `VITE_ADMIN_EMAILS` | Correo de la dueña (varios separados por coma) |
 | `VITE_SITE_URL` | `https://printly.mx` (o la URL de Netlify mientras no haya dominio) |
-| `MP_ACCESS_TOKEN` | Access Token de Mercado Pago |
+| `PAYPAL_CLIENT_ID` / `PAYPAL_CLIENT_SECRET` | Credenciales Live de PayPal |
+| `PAYPAL_ENV` | `live` |
+| `MP_ACCESS_TOKEN` | Access Token de Mercado Pago (opcional) |
 | `MP_WEBHOOK_SECRET` | Clave secreta del webhook |
 | `FIREBASE_SERVICE_ACCOUNT_BASE64` | El JSON de la cuenta de servicio en base64 |
 
@@ -118,6 +134,9 @@ netlify.toml                  Build, redirecciones SPA, /api → funciones, cabe
 firestore.rules               Reglas de seguridad (pegar en Firebase)
 .env.example                  Variables de entorno
 netlify/functions/
+  paypal-create-order.js      Crea la orden de PayPal (precio recalculado en servidor)
+  paypal-capture.js           Cobra y verifica el pago de PayPal, marca el pedido como pagado
+  pay-status.js               Indica qué pagos en línea están configurados
   create-preference.js        Crea el pago de Mercado Pago (precio recalculado en servidor)
   mp-webhook.js               Recibe la confirmación de pago y actualiza el pedido
   _lib/admin.js               Firebase Admin

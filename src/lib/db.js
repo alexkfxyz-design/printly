@@ -161,10 +161,20 @@ export async function startOnlinePayment(orderId) {
   return data.url;
 }
 
-/** ¿Está configurado Mercado Pago en el servidor? (false en local o si faltan las variables en Netlify) */
-let payStatus;
-export function onlinePayAvailable() {
-  if (MODE === 'demo') return Promise.resolve(false);
-  if (!payStatus) payStatus = fetch('/api/pay-status').then((r) => r.json()).then((d) => !!d.online).catch(() => false);
-  return payStatus;
+/** Pagos en línea configurados en el servidor (Netlify). En local o sin variables, todo en false. */
+let payConfig;
+export function getPayConfig() {
+  const none = { mercadopago: false, paypal: false, paypalClientId: null };
+  if (MODE === 'demo') return Promise.resolve(none);
+  if (!payConfig) payConfig = fetch('/api/pay-status').then((r) => r.json()).then((d) => ({ ...none, ...d })).catch(() => none);
+  return payConfig;
 }
+
+async function post(path, body) {
+  const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.error || 'error'), { detail: data.error, retry: data.retry });
+  return data;
+}
+export const paypalCreateOrder = (orderId) => post('/api/paypal-create-order', { orderId }).then((d) => d.id);
+export const paypalCapture = (orderId, paypalOrderId) => post('/api/paypal-capture', { orderId, paypalOrderId });

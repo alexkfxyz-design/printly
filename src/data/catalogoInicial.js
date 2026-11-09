@@ -870,8 +870,7 @@ export const CATALOGO_INICIAL = {
     "designFee": 100,
     "payMethods": [
       "Transferencia SPEI",
-      "Depósito en OXXO",
-      "Efectivo al recoger"
+            "Efectivo al recoger"
     ],
     "discounts": [
       {
@@ -890,7 +889,8 @@ export const CATALOGO_INICIAL = {
     "instagram": "soyprintly.mx",
     "email": "",
     "city": "Veracruz, Ver.",
-    "onlinePay": true,
+    "onlinePay": false,
+    "paypalPay": true,
     "transferPay": true,
     "instagramUrl": "https://www.instagram.com/soyprintly.mx",
     "tiktok": "soyprintly.mx",

@@ -34,7 +34,8 @@ service cloud.firestore {
         && request.resource.data.status == 'recibido'
         && request.resource.data.payStatus == 'pendiente'
         && request.resource.data.paid == 0
-        && !('mp' in request.resource.data);
+        && !('mp' in request.resource.data)
+        && !('paypal' in request.resource.data);
       allow read: if isAdmin()
         || (request.auth != null && resource.data.uid == request.auth.uid);
       allow update, delete: if isAdmin();
