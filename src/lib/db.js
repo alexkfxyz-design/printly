@@ -160,3 +160,11 @@ export async function startOnlinePayment(orderId) {
   if (!res.ok || !data.url) throw Object.assign(new Error(data.error || 'mp'), { code: 'mp', detail: data.error });
   return data.url;
 }
+
+/** ¿Está configurado Mercado Pago en el servidor? (false en local o si faltan las variables en Netlify) */
+let payStatus;
+export function onlinePayAvailable() {
+  if (MODE === 'demo') return Promise.resolve(false);
+  if (!payStatus) payStatus = fetch('/api/pay-status').then((r) => r.json()).then((d) => !!d.online).catch(() => false);
+  return payStatus;
+}

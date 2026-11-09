@@ -81,7 +81,7 @@ export default function Home() {
           <ul className="trust">
             <li><b>Arte para aprobar</b><span>Antes de imprimir</span></li>
             <li><b>{st.normalDays} días hábiles</b><span>O {st.rushDays} con urgencia</span></li>
-            <li><b>Paga como prefieras</b><span>{st.onlinePay ? 'Tarjeta, OXXO o transferencia' : 'Transferencia u OXXO'}</span></li>
+            <li><b>Paga como prefieras</b><span>Transferencia, OXXO o en línea</span></li>
           </ul>
         </div>
         <div className="collage">

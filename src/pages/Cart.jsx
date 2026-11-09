@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
 import { addBusinessDays, orderTotals } from '../lib/pricing.js';
-import { createOrder, startOnlinePayment } from '../lib/db.js';
+import { createOrder, onlinePayAvailable, startOnlinePayment } from '../lib/db.js';
 import { fmtLongDate, orderCode } from '../lib/format.js';
 import Mockup from '../components/Mockup.jsx';
 import { Empty, Loading, useMoney, useTitle } from '../components/ui.jsx';
@@ -16,9 +16,11 @@ export default function Cart() {
   const nav = useNavigate();
   const [delivery, setDelivery] = useState('recoger');
   const [rush, setRush] = useState(false);
-  const canOnline = st.onlinePay !== false;
-  const canTransfer = st.transferPay !== false;
-  const [payChoice, setPayChoice] = useState(canOnline ? 'online' : 'transferencia');
+  const [mpReady, setMpReady] = useState(false);
+  useEffect(() => { onlinePayAvailable().then(setMpReady); }, []);
+  const canOnline = st.onlinePay !== false && mpReady;
+  const canTransfer = st.transferPay !== false || !canOnline;
+  const [payChoice, setPayChoice] = useState('online');
   const [form, setForm] = useState({ name: '', phone: '', email: '', address: '', payMethod: '', notes: '', accept: false });
   const [err, setErr] = useState('');
   const [sending, setSending] = useState(false);
@@ -132,7 +134,6 @@ export default function Cart() {
           {choice === 'transferencia' && (
             <label className="f">¿Cómo vas a pagar el anticipo?<select value={form.payMethod || transferMethods[0]} onChange={f('payMethod')}>{transferMethods.map((m) => <option key={m}>{m}</option>)}</select></label>
           )}
-          {choice === 'online' && mode === 'demo' && <p className="note">En la versión demo el pago en línea no se cobra: el pedido se registra como pendiente.</p>}
           <label className="f">Comentarios <span className="hint">opcional</span><textarea value={form.notes} onChange={f('notes')} placeholder="Fecha de tu evento, dudas, referencias…" /></label>
 
           <div className="sumbox">

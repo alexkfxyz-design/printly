@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from '../context/StoreContext.jsx';
-import { startOnlinePayment, subscribeOrder } from '../lib/db.js';
+import { onlinePayAvailable, startOnlinePayment, subscribeOrder } from '../lib/db.js';
 import { fmtDate, PAY, STATUSES, waLink } from '../lib/format.js';
 import Mockup from '../components/Mockup.jsx';
 import { Empty, Loading, Paw, Pill, useMoney, useTitle } from '../components/ui.jsx';
@@ -29,6 +29,8 @@ export default function OrderPage() {
   const money = useMoney();
   const [o, setO] = useState(undefined);
   const [paying, setPaying] = useState(false);
+  const [mpReady, setMpReady] = useState(false);
+  useEffect(() => { onlinePayAvailable().then(setMpReady); }, []);
   useTitle(o ? `Pedido ${o.code}` : 'Tu pedido');
 
   useEffect(() => {
@@ -87,7 +89,7 @@ export default function OrderPage() {
         <div className="paybox">
           {paid ? (
             <><h3>Todo listo</h3><p>Recibimos tu pago. Te escribiremos por WhatsApp para enviarte el arte final y avisarte cuando esté listo.</p></>
-          ) : o.payChoice === 'online' ? (
+          ) : o.payChoice === 'online' && mpReady ? (
             <>
               <h3>Paga en línea</h3>
               <p>Paga {money(o.total)} con tarjeta, OXXO o saldo de Mercado Pago. Tu pedido entra a producción en cuanto se acredite.</p>
