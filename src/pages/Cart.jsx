@@ -19,8 +19,9 @@ export default function Cart() {
   const [pc, setPc] = useState({ mercadopago: false, paypal: false });
   useEffect(() => { getPayConfig().then(setPc); }, []);
   const canMp = st.onlinePay !== false && pc.mercadopago;
-  const canPaypal = st.paypalPay !== false && pc.paypal;
-  const canTransfer = st.transferPay !== false || (!canMp && !canPaypal);
+  const canPaypal = st.paypalPay !== false && (pc.paypal || !!st.paypalMe);
+  const canCash = st.cashPay !== false && delivery === 'recoger';
+  const canTransfer = st.transferPay !== false || (!canMp && !canPaypal && !canCash);
   const [payChoice, setPayChoice] = useState('');
   const [form, setForm] = useState({ name: '', phone: '', email: '', address: '', payMethod: '', notes: '', accept: false });
   const [err, setErr] = useState('');
@@ -32,10 +33,10 @@ export default function Cart() {
 
   const t = orderTotals(cart, st, { rush, delivery });
   const ready = addBusinessDays(new Date(), rush ? Number(st.rushDays) : Number(st.normalDays));
-  const transferMethods = st.payMethods?.length ? st.payMethods : ['Transferencia SPEI'];
-  const avail = [canPaypal && 'paypal', canMp && 'online', canTransfer && 'transferencia'].filter(Boolean);
+  const avail = [canCash && 'efectivo', canTransfer && 'transferencia', canPaypal && 'paypal', canMp && 'online'].filter(Boolean);
   const choice = avail.includes(payChoice) ? payChoice : avail[0];
   const payNow = choice === 'paypal' || choice === 'online';
+  const METHOD = { efectivo: 'Efectivo al recoger', transferencia: 'Transferencia SPEI', paypal: 'PayPal', online: 'Mercado Pago' };
   const f = (k) => (e) => setForm((s) => ({ ...s, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
   async function submit(e) {
@@ -54,7 +55,7 @@ export default function Cart() {
       id: newId(), code: orderCode(), createdAt: now, uid: user.uid,
       customer: { name: form.name.trim(), phone: form.phone.trim(), email: form.email.trim() },
       delivery, address: delivery === 'envio' ? form.address.trim() : '', notes: form.notes.trim(),
-      payChoice: choice, payMethod: choice === 'online' ? 'Mercado Pago' : choice === 'paypal' ? 'PayPal' : (form.payMethod || transferMethods[0]), rush,
+      payChoice: choice, payMethod: METHOD[choice], rush,
       items: cart.map(({ cfg, key, ...rest }) => rest),
       sub: t.sub, disc: t.disc, discPct: t.tier?.pct || 0, rushFee: t.rush, ship: t.ship, total: t.total, deposit: t.deposit,
       paid: 0, payStatus: 'pendiente', status: 'recibido', history: [{ status: 'recibido', at: now }],
@@ -124,23 +125,24 @@ export default function Cart() {
           <label className="chk"><input type="checkbox" checked={rush} onChange={(e) => setRush(e.target.checked)} /> Pedido urgente: listo en {st.rushDays} días hábiles (+{st.rushPct}%)</label>
 
           <h3>Pago</h3>
-          <div className="radio-cards">
+          <div className="paylist">
+            {canCash && (
+              <button type="button" className="opt" aria-pressed={choice === 'efectivo'} onClick={() => setPayChoice('efectivo')}>
+                <b>Efectivo al recoger</b><span>Para clientes de Veracruz. Pagas cuando recoges tu pedido en tienda.</span><em>Veracruz</em></button>
+            )}
+            {canTransfer && (
+              <button type="button" className="opt" aria-pressed={choice === 'transferencia'} onClick={() => setPayChoice('transferencia')}>
+                <b>Transferencia bancaria (SPEI)</b><span>Desde cualquier banco de México. Confirmas con el {st.depositPct}% de anticipo y liquidas al entregar.</span><em>Todo México</em></button>
+            )}
             {canPaypal && (
               <button type="button" className="opt" aria-pressed={choice === 'paypal'} onClick={() => setPayChoice('paypal')}>
-                <b>Pagar con PayPal</b><span>Con tu cuenta PayPal o con tarjeta de crédito o débito. Pagas el total.</span><em>PayPal</em></button>
+                <b>PayPal</b><span>Con tu cuenta PayPal o tarjeta internacional. Pagas el total.</span><em>Desde el extranjero</em></button>
             )}
             {canMp && (
               <button type="button" className="opt" aria-pressed={choice === 'online'} onClick={() => setPayChoice('online')}>
                 <b>Pagar en línea</b><span>Tarjeta de crédito o débito, OXXO o saldo Mercado Pago. Pagas el total.</span><em>Mercado Pago</em></button>
             )}
-            {canTransfer && (
-              <button type="button" className="opt" aria-pressed={choice === 'transferencia'} onClick={() => setPayChoice('transferencia')}>
-                <b>Transferencia o depósito</b><span>Confirmas con el {st.depositPct}% de anticipo y liquidas al entregar.</span><em>Anticipo {money(t.deposit)}</em></button>
-            )}
           </div>
-          {choice === 'transferencia' && (
-            <label className="f">¿Cómo vas a pagar el anticipo?<select value={form.payMethod || transferMethods[0]} onChange={f('payMethod')}>{transferMethods.map((m) => <option key={m}>{m}</option>)}</select></label>
-          )}
           <label className="f">Comentarios <span className="hint">opcional</span><textarea value={form.notes} onChange={f('notes')} placeholder="Fecha de tu evento, dudas, referencias…" /></label>
 
           <div className="sumbox">
@@ -149,17 +151,17 @@ export default function Cart() {
             {t.rush > 0 && <div className="line"><span>Urgencia</span><span className="num">{money(t.rush)}</span></div>}
             {t.ship > 0 && <div className="line"><span>Envío</span><span className="num">{money(t.ship)}</span></div>}
             <div className="line total"><span>Total</span><span className="num">{money(t.total)}</span></div>
-            <div className="line strong"><span>{payNow ? 'A pagar ahora' : `Anticipo para confirmar (${st.depositPct}%)`}</span><span className="num">{money(payNow ? t.total : t.deposit)}</span></div>
+            <div className="line strong"><span>{payNow ? 'A pagar ahora' : choice === 'efectivo' ? 'A pagar al recoger' : `Anticipo para confirmar (${st.depositPct}%)`}</span><span className="num">{money(payNow || choice === 'efectivo' ? t.total : t.deposit)}</span></div>
             <p className="muted small">Entrega estimada: {fmtLongDate(ready)}, contada desde que apruebas el arte.</p>
           </div>
 
           <label className="chk small"><input type="checkbox" checked={form.accept} onChange={f('accept')} /> <span>Acepto el <Link to="/aviso-de-privacidad" target="_blank">aviso de privacidad</Link> y los <Link to="/terminos" target="_blank">términos y condiciones</Link>.</span></label>
           {err && <p className="err" role="alert">{err}</p>}
           <button className="btn primary block lg" type="submit" disabled={sending || !!authError}>
-            {sending ? 'Enviando…' : choice === 'online' ? `Pagar ${money(t.total)}` : choice === 'paypal' ? 'Continuar al pago con PayPal' : 'Enviar pedido'}
+            {sending ? 'Enviando…' : choice === 'online' ? `Pagar ${money(t.total)}` : choice === 'paypal' ? 'Enviar pedido y pagar con PayPal' : 'Enviar pedido'}
           </button>
           {choice === 'online' && <p className="muted small center-text">Te llevaremos a Mercado Pago para pagar de forma segura.</p>}
-          {choice === 'paypal' && <p className="muted small center-text">Guardamos tu pedido y en el siguiente paso pagas con PayPal.</p>}
+          {choice === 'paypal' && <p className="muted small center-text">Guardamos tu pedido y en el siguiente paso te mostramos el botón de PayPal.</p>}
         </form>
       </div>
     </>

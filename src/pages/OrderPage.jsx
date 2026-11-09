@@ -14,11 +14,16 @@ export function Track({ o }) {
   return <div className="track">{flow.map((s, i) => <div key={s[0]} className={i <= idx ? 'on' : ''}><i />{s[1]}</div>)}</div>;
 }
 
+export function paypalMeLink(base, amount) {
+  const url = String(base || '').trim().replace(/\/+$/, '');
+  return `${url.startsWith('http') ? url : `https://paypal.me/${url.replace(/^@/, '')}`}/${(Math.round(amount * 100) / 100).toFixed(2)}MXN`;
+}
+
 export function orderMessage(o, money) {
   return [
     `Hola, hice el pedido ${o.code} en la web.`,
     ...o.items.map((i) => `• ${i.name} x${i.qty} (${i.mat?.name || ''}, ${i.tech?.name || ''})`),
-    `Total: ${money(o.total)}${o.payChoice === 'transferencia' ? ` · Anticipo: ${money(o.deposit)}` : ''}`,
+    `Total: ${money(o.total)}${o.payChoice === 'transferencia' ? ` · Anticipo: ${money(o.deposit)}` : ''} · Pago: ${o.payMethod}`,
     `Nombre: ${o.customer.name}`
   ].join('\n');
 }
@@ -92,12 +97,23 @@ export default function OrderPage() {
         <div className="paybox">
           {paid ? (
             <><h3>Todo listo</h3><p>Recibimos tu pago. Te escribiremos por WhatsApp para enviarte el arte final y avisarte cuando esté listo.</p></>
-          ) : o.payChoice === 'paypal' && pc.paypal && st.paypalPay !== false && !showTransfer ? (
+          ) : o.payChoice === 'paypal' && st.paypalPay !== false && (pc.paypal || st.paypalMe) && !showTransfer ? (
             <>
               <h3>Paga con PayPal</h3>
-              <p>Paga <b>{money(o.total)}</b> con tu cuenta PayPal o con tarjeta de crédito o débito. Tu pedido entra a producción en cuanto se acredite.</p>
-              <PayPalButton orderId={o.id} clientId={pc.paypalClientId} onPaid={onPaid} />
+              <p>Paga <b>{money(o.total)}</b> con tu cuenta PayPal o con tarjeta. Tu pedido entra a producción en cuanto se acredite.</p>
+              {pc.paypal ? <PayPalButton orderId={o.id} clientId={pc.paypalClientId} onPaid={onPaid} /> : (
+                <>
+                  <a className="btn primary block lg paypal-btn" href={paypalMeLink(st.paypalMe, o.total)} target="_blank" rel="noopener">Pagar {money(o.total)} en PayPal</a>
+                  <p className="muted small">Se abre PayPal con el monto listo. En la nota del pago escribe tu código <b>{o.code}</b> y mándanos la captura por WhatsApp.</p>
+                </>
+              )}
               {st.transferPay !== false && <button className="btn ghost sm" onClick={() => setShowTransfer(true)}>Prefiero pagar por transferencia</button>}
+            </>
+          ) : o.payChoice === 'efectivo' && !showTransfer ? (
+            <>
+              <h3>Pagas al recoger</h3>
+              <p>Pagas <b>{money(o.total)}</b> en efectivo cuando recojas tu pedido{st.pickupAddress ? <> en <b>{st.pickupAddress}</b></> : ''}.</p>
+              <p className="muted small">Te escribiremos por WhatsApp para aprobar el arte y avisarte cuando esté listo.</p>
             </>
           ) : o.payChoice === 'online' && pc.mercadopago && !showTransfer ? (
             <>
@@ -108,7 +124,7 @@ export default function OrderPage() {
           ) : (
             <>
               <h3>Confirma con tu anticipo</h3>
-              <p>Envía <b>{money(o.deposit)}</b> por {['PayPal', 'Mercado Pago'].includes(o.payMethod) ? 'transferencia' : o.payMethod}{st.payNumber ? <> a la cuenta <b className="num">{st.payNumber}</b></> : ''}{st.payHolder ? ` a nombre de ${st.payHolder}` : ''}.</p>
+              <p>Envía <b>{money(o.deposit)}</b> por transferencia SPEI{st.payNumber ? <> a la cuenta <b className="num">{st.payNumber}</b></> : ''}{st.payHolder ? ` a nombre de ${st.payHolder}` : ''}.</p>
               <p className="muted small">Saldo al entregar: {money(o.total - o.deposit)}</p>
             </>
           )}

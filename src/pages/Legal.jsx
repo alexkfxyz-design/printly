@@ -50,7 +50,7 @@ export default function Legal({ kind }) {
       <h2>Precios y pagos</h2>
       <ul>
         <li>Los precios están en pesos mexicanos (MXN) e incluyen IVA.</li>
-        <li>Puedes pagar el total en línea con PayPal (cuenta o tarjeta), o confirmar con un anticipo del {st.depositPct}% por transferencia y liquidar al entregar.</li>
+        <li>En Veracruz puedes pagar en efectivo al recoger. Desde cualquier parte de México, por transferencia SPEI con un anticipo del {st.depositPct}% y el resto al entregar. Desde el extranjero, el total con PayPal.</li>
         <li>El pedido entra a producción cuando se acredita el pago o el anticipo.</li>
       </ul>
       <h2>Tiempos de entrega</h2>

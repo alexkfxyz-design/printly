@@ -5,7 +5,7 @@ import { clone } from '../../lib/format.js';
 import { ConfirmButton } from '../../components/ui.jsx';
 import { useSaveCatalog } from './Admin.jsx';
 
-const TEXT = ['shopName', 'whatsapp', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'email', 'city', 'pickupAddress', 'deliveryNote', 'payNumber', 'payHolder', 'legalName', 'legalAddress', 'legalUpdated'];
+const TEXT = ['shopName', 'whatsapp', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'email', 'city', 'pickupAddress', 'deliveryNote', 'payNumber', 'payHolder', 'paypalMe', 'legalName', 'legalAddress', 'legalUpdated'];
 const NUM = ['deliveryFee', 'depositPct', 'normalDays', 'rushDays', 'rushPct', 'designFee'];
 
 export default function Settings() {
@@ -17,13 +17,13 @@ export default function Settings() {
 
   async function submit(e) {
     e.preventDefault();
-    if (s.onlinePay === false && s.transferPay === false && s.paypalPay === false) return toast('Deja activo al menos un método de pago.');
+    if (s.transferPay === false && s.paypalPay === false && s.cashPay === false) return toast('Deja activo al menos un método de pago.');
     const c = clone(catalog);
     const st = c.settings;
     TEXT.forEach((k) => { st[k] = String(s[k] ?? '').trim(); });
     NUM.forEach((k) => { st[k] = Math.max(0, Number(s[k]) || 0); });
     st.instagram = st.instagram.replace(/^@/, ''); st.tiktok = st.tiktok.replace(/^@/, '');
-    st.onlinePay = s.onlinePay !== false; st.transferPay = s.transferPay !== false; st.paypalPay = s.paypalPay !== false;
+    st.onlinePay = s.onlinePay !== false; st.transferPay = s.transferPay !== false; st.paypalPay = s.paypalPay !== false; st.cashPay = s.cashPay !== false;
     st.payMethods = s.payMethodsText.split('\n').map((x) => x.trim()).filter(Boolean);
     st.discounts = s.discounts.map((d) => ({ qty: Number(d.qty), pct: Number(d.pct) })).filter((d) => d.qty > 0 && d.pct > 0).sort((a, b) => a.qty - b.qty);
     await save(c, 'Ajustes guardados');
@@ -65,15 +65,16 @@ export default function Settings() {
       </div>
       <div className="card stack">
         <h3>Pagos</h3>
-        <label className="chk"><input type="checkbox" {...chk('paypalPay')} /> Pago en línea con PayPal (cuenta PayPal o tarjeta)</label>
-        <label className="chk"><input type="checkbox" {...chk('onlinePay')} /> Pago en línea con Mercado Pago (tarjeta, OXXO, saldo)</label>
-        <label className="chk"><input type="checkbox" {...chk('transferPay')} /> Anticipo por transferencia o depósito</label>
-        <p className="muted small">Los pagos en línea solo se muestran a los clientes cuando sus claves están configuradas en Netlify.</p>
-        <label className="f">Métodos para el anticipo <span className="hint">uno por línea</span><textarea {...f('payMethodsText')} /></label>
+        <label className="chk"><input type="checkbox" {...chk('cashPay')} /> Efectivo al recoger (solo si el cliente elige recoger en tienda)</label>
+        <label className="chk"><input type="checkbox" {...chk('transferPay')} /> Transferencia bancaria SPEI (con anticipo)</label>
         <div className="row">
-          <label className="f">CLABE, cuenta o tarjeta<input type="text" {...f('payNumber')} /></label>
-          <label className="f">Titular<input type="text" {...f('payHolder')} /></label>
+          <label className="f">CLABE o cuenta<input type="text" {...f('payNumber')} /></label>
+          <label className="f">Titular y banco<input type="text" {...f('payHolder')} /></label>
         </div>
+        <label className="chk"><input type="checkbox" {...chk('paypalPay')} /> PayPal (pago total)</label>
+        <label className="f">Enlace de PayPal.me<input type="url" placeholder="https://paypal.me/soyprintlymx" {...f('paypalMe')} /></label>
+        <label className="chk"><input type="checkbox" {...chk('onlinePay')} /> Mercado Pago (solo si está configurado en Netlify)</label>
+        <p className="muted small">Si configuras las claves de PayPal en Netlify, el cobro se confirma solo. Sin ellas, el cliente paga con el enlace de PayPal.me y tú marcas el pedido como pagado.</p>
         <label className="f">Anticipo para confirmar (%)<input type="number" min="0" max="100" {...f('depositPct')} /></label>
         <h3>Producción y precios</h3>
         <div className="row">

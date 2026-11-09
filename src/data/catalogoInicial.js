@@ -858,8 +858,8 @@ export const CATALOGO_INICIAL = {
     "shopName": "Printly",
     "currency": "$",
     "whatsapp": "2291745486",
-    "payNumber": "",
-    "payHolder": "",
+    "payNumber": "646180401633762054",
+    "payHolder": "Elia Margarita García García (STP / OpenBank)",
     "pickupAddress": "Calle 4 #940, C.P. 91720, Veracruz, Ver.",
     "deliveryFee": 99,
     "deliveryNote": "Envío local o por paquetería a todo México",
@@ -869,8 +869,9 @@ export const CATALOGO_INICIAL = {
     "depositPct": 50,
     "designFee": 100,
     "payMethods": [
+      "Efectivo al recoger",
       "Transferencia SPEI",
-            "Efectivo al recoger"
+      "PayPal"
     ],
     "discounts": [
       {
@@ -897,6 +898,8 @@ export const CATALOGO_INICIAL = {
     "tiktokUrl": "https://www.tiktok.com/@soyprintly.mx",
     "facebook": "Printly MX",
     "facebookUrl": "https://www.facebook.com/share/1Fn5FP3YQU/",
-    "legalAddress": "Calle 4 #940, C.P. 91720, Veracruz, Ver."
+    "legalAddress": "Calle 4 #940, C.P. 91720, Veracruz, Ver.",
+    "paypalMe": "https://paypal.me/soyprintlymx",
+    "cashPay": true
   }
 };

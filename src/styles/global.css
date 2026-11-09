@@ -513,3 +513,10 @@ input[type=password]:focus{border-color:var(--accent);outline:none;box-shadow:0 
 .foot-in a{overflow-wrap:anywhere}
 .paypal-box{display:grid;gap:10px;min-height:60px}
 .paypal-box > div{min-width:0}
+.paylist{display:grid;gap:8px}
+.paylist .opt{grid-template-columns:minmax(0,1fr) auto;column-gap:12px}
+.paylist .opt span{grid-column:1}
+.paylist .opt em{grid-column:2;grid-row:1 / span 2;align-self:center;white-space:nowrap;background:var(--surface-2);padding:3px 9px;border-radius:999px;font-size:12px}
+.paylist .opt[aria-pressed="true"] em{background:var(--surface)}
+.btn.paypal-btn{background:#FFC439;border-color:#FFC439;color:#111}
+.btn.paypal-btn:hover{background:#F2B92E;border-color:#F2B92E;color:#111}

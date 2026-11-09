@@ -68,7 +68,7 @@ export const AUTH_ERRORS = {
 
 /* ---------------- catálogo ---------------- */
 // Datos de contacto: si en la base de datos están vacíos se usan los del catálogo inicial.
-const CONTACT_KEYS = ['whatsapp', 'pickupAddress', 'city', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'legalAddress'];
+const CONTACT_KEYS = ['whatsapp', 'pickupAddress', 'city', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'legalAddress', 'paypalMe', 'payNumber', 'payHolder'];
 function withDefaults(st = {}) {
   const def = CATALOGO_INICIAL.settings;
   const out = { ...def, ...st };
