@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// Reglas de seguridad de Printly.
+// Firebase → Firestore Database → Reglas → pega este archivo → Publicar.
+// Cambia el correo por el de la dueña (el mismo de VITE_ADMIN_EMAILS en Netlify).
+// Las funciones de Netlify (Mercado Pago) usan Firebase Admin y no dependen de estas reglas.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.get('email', '').lower() in [
+          'correo-de-la-duena@gmail.com'
+        ];
+    }
+
+    // Ajustes, categorías, colores, materiales y técnicas
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Productos
+    match /productos/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Pedidos: el cliente crea los suyos y solo ve los suyos; la dueña ve y gestiona todos.
+    match /pedidos/{id} {
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'recibido'
+        && request.resource.data.payStatus == 'pendiente'
+        && request.resource.data.paid == 0
+        && !('mp' in request.resource.data);
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+  }
+}

@@ -1,8 +1,6 @@
-// Catálogo inicial de la tienda (precios en MXN, IVA incluido). Se carga la primera vez; luego los cambios del panel se guardan en el navegador.
-// Para agregar fotos a un producto, pon la imagen en img/productos/ y añade su ruta en "photos" (la primera es la portada).
-// Si editas este archivo, sube el número de "version" para que los navegadores carguen el catálogo nuevo.
-const DEFAULT_CATALOG = {
-  "version": 3,
+// Catálogo inicial. En modo demo se usa tal cual; con Firebase, el panel lo publica con "Publicar catálogo inicial".
+// Precios en MXN con IVA incluido.
+export const CATALOGO_INICIAL = {
   "categories": [
     {
       "id": "ropa",
@@ -14,7 +12,7 @@ const DEFAULT_CATALOG = {
     },
     {
       "id": "accesorios",
-      "name": "Accesorios"
+      "name": "Accesorios y fotos"
     }
   ],
   "colors": [
@@ -248,6 +246,51 @@ const DEFAULT_CATALOG = {
         "vinil",
         "serigrafia"
       ]
+    },
+    {
+      "id": "interior-color",
+      "name": "Cerámica con asa e interior de color",
+      "add": 25,
+      "desc": "Asa e interior en amarillo, rojo, azul, verde o rosa.",
+      "techs": [
+        "sublimacion"
+      ]
+    },
+    {
+      "id": "asa-corazon",
+      "name": "Cerámica con asa de corazón",
+      "add": 35,
+      "desc": "Ideal para regalos de pareja y aniversarios.",
+      "techs": [
+        "sublimacion"
+      ]
+    },
+    {
+      "id": "esmerilado",
+      "name": "Vidrio esmerilado degradado",
+      "add": 30,
+      "desc": "Acabado mate con degradado de color en la base.",
+      "techs": [
+        "sublimacion"
+      ]
+    },
+    {
+      "id": "papel-foto",
+      "name": "Papel fotográfico brillante",
+      "add": 0,
+      "desc": "Impresión de alta calidad lista para enmarcar.",
+      "techs": [
+        "foto"
+      ]
+    },
+    {
+      "id": "papel-mate",
+      "name": "Papel fotográfico mate",
+      "add": 10,
+      "desc": "Sin reflejos, colores suaves.",
+      "techs": [
+        "foto"
+      ]
     }
   ],
   "products": [
@@ -292,11 +335,22 @@ const DEFAULT_CATALOG = {
         }
       ],
       "photos": [
-        "img/productos/oversize-1.webp",
-        "img/productos/oversize-2.webp",
-        "img/productos/oversize-3.webp",
-        "img/productos/oversize-4.webp",
-        "img/productos/oversize-5.webp"
+        "/img/productos/oversize-r1.webp",
+        "/img/productos/oversize-r2.webp",
+        "/img/productos/oversize-r3.webp",
+        "/img/productos/oversize-r4.webp",
+        "/img/productos/oversize-r5.webp",
+        "/img/productos/oversize-r6.webp",
+        "/img/productos/oversize-r7.webp",
+        "/img/productos/oversize-r8.webp",
+        "/img/productos/oversize-r9.webp",
+        "/img/productos/oversize-r10.webp",
+        "/img/productos/oversize-r11.webp",
+        "/img/productos/oversize-1.webp",
+        "/img/productos/oversize-2.webp",
+        "/img/productos/oversize-3.webp",
+        "/img/productos/oversize-4.webp",
+        "/img/productos/oversize-5.webp"
       ],
       "badge": "Más pedido"
     },
@@ -358,10 +412,75 @@ const DEFAULT_CATALOG = {
         }
       ],
       "photos": [
-        "img/productos/polo-1.webp",
-        "img/productos/polo-2.webp"
+        "/img/productos/clasica-r1.webp",
+        "/img/productos/clasica-r2.webp",
+        "/img/productos/clasica-r3.webp",
+        "/img/productos/clasica-r4.webp",
+        "/img/productos/clasica-r5.webp",
+        "/img/productos/clasica-r6.webp",
+        "/img/productos/clasica-r7.webp",
+        "/img/productos/clasica-r8.webp",
+        "/img/productos/clasica-r9.webp",
+        "/img/productos/clasica-r10.webp",
+        "/img/productos/clasica-r11.webp",
+        "/img/productos/clasica-r12.webp",
+        "/img/productos/clasica-r13.webp",
+        "/img/productos/clasica-r14.webp",
+        "/img/productos/clasica-r15.webp",
+        "/img/productos/clasica-r16.webp",
+        "/img/productos/clasica-r17.webp",
+        "/img/productos/clasica-r18.webp",
+        "/img/productos/clasica-r19.webp",
+        "/img/productos/clasica-r20.webp",
+        "/img/productos/clasica-r21.webp",
+        "/img/productos/clasica-r22.webp",
+        "/img/productos/polo-1.webp",
+        "/img/productos/polo-2.webp"
       ],
       "badge": ""
+    },
+    {
+      "id": "taza",
+      "name": "Taza 11 oz",
+      "cat": "tazas",
+      "shape": "mug",
+      "base": 120,
+      "minQty": 1,
+      "active": true,
+      "desc": "La clásica de regalo. Diseño a uno o ambos lados.",
+      "mats": [
+        "ceramica",
+        "interior-color",
+        "asa-corazon",
+        "magica"
+      ],
+      "colors": [],
+      "useSizes": false,
+      "sizes": [],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Lado derecho",
+          "extra": 0
+        },
+        {
+          "key": "reverso",
+          "label": "Lado izquierdo",
+          "extra": 20
+        }
+      ],
+      "photos": [
+        "/img/productos/taza-r1.webp",
+        "/img/productos/taza-r2.webp",
+        "/img/productos/taza-r3.webp",
+        "/img/productos/taza-r4.webp",
+        "/img/productos/taza-r5.webp",
+        "/img/productos/taza-r6.webp",
+        "/img/productos/taza-r7.webp",
+        "/img/productos/taza-r8.webp",
+        "/img/productos/taza-r9.webp"
+      ],
+      "badge": "Regalo ideal"
     },
     {
       "id": "tomatodo",
@@ -396,78 +515,14 @@ const DEFAULT_CATALOG = {
         }
       ],
       "photos": [
-        "img/productos/tomatodo-4.webp",
-        "img/productos/tomatodo-1.webp",
-        "img/productos/tomatodo-2.webp",
-        "img/productos/tomatodo-3.webp",
-        "img/productos/tomatodo-5.webp"
-      ],
-      "badge": "Regalo ideal"
-    },
-    {
-      "id": "jarro",
-      "name": "Tarro cervecero",
-      "cat": "tazas",
-      "shape": "beer",
-      "base": 160,
-      "minQty": 1,
-      "active": true,
-      "desc": "Vidrio grueso con asa. Ideal para nombres.",
-      "mats": [
-        "vidrio"
-      ],
-      "colors": [],
-      "useSizes": false,
-      "sizes": [],
-      "zones": [
-        {
-          "key": "frente",
-          "label": "Frente",
-          "extra": 0
-        }
-      ],
-      "photos": [
-        "img/productos/jarro-1.webp",
-        "img/productos/jarro-2.webp",
-        "img/productos/jarro-3.webp",
-        "img/productos/jarro-4.webp",
-        "img/productos/jarro-5.webp"
+        "/img/productos/termo-r1.webp",
+        "/img/productos/termo-r2.webp",
+        "/img/productos/tomatodo-4.webp",
+        "/img/productos/tomatodo-1.webp",
+        "/img/productos/tomatodo-2.webp",
+        "/img/productos/tomatodo-3.webp"
       ],
       "badge": "Con tu nombre"
-    },
-    {
-      "id": "llavero",
-      "name": "Llavero",
-      "cat": "accesorios",
-      "shape": "keychain",
-      "base": 45,
-      "minQty": 1,
-      "active": true,
-      "desc": "Con tu foto, tu logo o tu frase favorita.",
-      "mats": [
-        "acrilico",
-        "mdf"
-      ],
-      "colors": [],
-      "useSizes": false,
-      "sizes": [],
-      "zones": [
-        {
-          "key": "frente",
-          "label": "Frente",
-          "extra": 0
-        },
-        {
-          "key": "reverso",
-          "label": "Reverso",
-          "extra": 10
-        }
-      ],
-      "photos": [
-        "img/productos/llavero-1.webp",
-        "img/productos/llavero-2.webp"
-      ],
-      "badge": ""
     },
     {
       "id": "polera",
@@ -519,21 +574,127 @@ const DEFAULT_CATALOG = {
           "extra": 35
         }
       ],
-      "photos": [],
+      "photos": [
+        "/img/productos/capucha-r1.webp",
+        "/img/productos/capucha-r2.webp",
+        "/img/productos/capucha-r3.webp",
+        "/img/productos/capucha-r4.webp"
+      ],
       "badge": ""
     },
     {
-      "id": "taza",
-      "name": "Taza 11 oz",
-      "cat": "tazas",
-      "shape": "mug",
-      "base": 120,
+      "id": "manga-larga",
+      "name": "Playera manga larga",
+      "cat": "ropa",
+      "shape": "tee",
+      "base": 230,
       "minQty": 1,
       "active": true,
-      "desc": "La clásica de regalo. Diseño a uno o ambos lados.",
+      "badge": "Temporada navideña",
+      "desc": "Algodón grueso de manga larga. Perfecta para diseños navideños.",
       "mats": [
-        "ceramica",
-        "magica"
+        "alg-peinado",
+        "alg-pima"
+      ],
+      "colors": [
+        "negro",
+        "blanco",
+        "rojo",
+        "botella",
+        "marino"
+      ],
+      "useSizes": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Frente",
+          "extra": 0
+        },
+        {
+          "key": "espalda",
+          "label": "Espalda",
+          "extra": 50
+        }
+      ],
+      "photos": [
+        "/img/productos/mangalarga-r1.webp",
+        "/img/productos/mangalarga-r2.webp"
+      ]
+    },
+    {
+      "id": "sudadera-cuello",
+      "name": "Sudadera cuello redondo",
+      "cat": "ropa",
+      "shape": "crew",
+      "base": 390,
+      "minQty": 1,
+      "active": true,
+      "badge": "",
+      "desc": "Felpa perchada sin capucha. Cómoda y calientita.",
+      "mats": [
+        "franela"
+      ],
+      "colors": [
+        "negro",
+        "jaspeado",
+        "marino",
+        "vino",
+        "blanco"
+      ],
+      "useSizes": true,
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Frente",
+          "extra": 0
+        },
+        {
+          "key": "espalda",
+          "label": "Espalda",
+          "extra": 60
+        },
+        {
+          "key": "manga_izq",
+          "label": "Manga izquierda",
+          "extra": 35
+        },
+        {
+          "key": "manga_der",
+          "label": "Manga derecha",
+          "extra": 35
+        }
+      ],
+      "photos": [
+        "/img/productos/sudadera-r1.webp",
+        "/img/productos/sudadera-r2.webp"
+      ]
+    },
+    {
+      "id": "jarro",
+      "name": "Tarro cervecero",
+      "cat": "tazas",
+      "shape": "beer",
+      "base": 160,
+      "minQty": 1,
+      "active": true,
+      "desc": "Vidrio grueso con asa. Ideal para nombres.",
+      "mats": [
+        "vidrio",
+        "esmerilado"
       ],
       "colors": [],
       "useSizes": false,
@@ -541,17 +702,120 @@ const DEFAULT_CATALOG = {
       "zones": [
         {
           "key": "frente",
-          "label": "Lado derecho",
+          "label": "Frente",
+          "extra": 0
+        }
+      ],
+      "photos": [
+        "/img/productos/tarro-r1.webp",
+        "/img/productos/tarro-r2.webp",
+        "/img/productos/jarro-1.webp",
+        "/img/productos/jarro-2.webp",
+        "/img/productos/jarro-3.webp",
+        "/img/productos/jarro-4.webp",
+        "/img/productos/jarro-5.webp"
+      ],
+      "badge": ""
+    },
+    {
+      "id": "tote",
+      "name": "Tote bag",
+      "cat": "accesorios",
+      "shape": "bag",
+      "base": 150,
+      "minQty": 1,
+      "active": true,
+      "desc": "Bolsa de manta para el día a día.",
+      "mats": [
+        "lona"
+      ],
+      "colors": [
+        "blanco",
+        "negro"
+      ],
+      "useSizes": false,
+      "sizes": [],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Frente",
           "extra": 0
         },
         {
           "key": "reverso",
-          "label": "Lado izquierdo",
-          "extra": 20
+          "label": "Reverso",
+          "extra": 40
         }
       ],
-      "photos": [],
+      "photos": [
+        "/img/productos/tote-r1.webp",
+        "/img/productos/tote-r2.webp",
+        "/img/productos/tote-r3.webp"
+      ],
       "badge": ""
+    },
+    {
+      "id": "llavero",
+      "name": "Llavero",
+      "cat": "accesorios",
+      "shape": "keychain",
+      "base": 45,
+      "minQty": 1,
+      "active": true,
+      "desc": "Con tu foto, tu logo o tu frase favorita.",
+      "mats": [
+        "acrilico",
+        "mdf"
+      ],
+      "colors": [],
+      "useSizes": false,
+      "sizes": [],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Frente",
+          "extra": 0
+        },
+        {
+          "key": "reverso",
+          "label": "Reverso",
+          "extra": 10
+        }
+      ],
+      "photos": [
+        "/img/productos/llavero-r1.webp",
+        "/img/productos/llavero-1.webp",
+        "/img/productos/llavero-2.webp"
+      ],
+      "badge": ""
+    },
+    {
+      "id": "foto-impresa",
+      "name": "Impresión fotográfica",
+      "cat": "accesorios",
+      "shape": "print",
+      "base": 60,
+      "minQty": 1,
+      "active": true,
+      "badge": "",
+      "desc": "Tu foto favorita impresa tamaño carta, lista para enmarcar.",
+      "mats": [
+        "papel-foto",
+        "papel-mate"
+      ],
+      "colors": [],
+      "useSizes": false,
+      "sizes": [],
+      "zones": [
+        {
+          "key": "frente",
+          "label": "Foto",
+          "extra": 0
+        }
+      ],
+      "photos": [
+        "/img/productos/foto-r1.webp"
+      ]
     },
     {
       "id": "gorra",
@@ -588,39 +852,6 @@ const DEFAULT_CATALOG = {
       ],
       "photos": [],
       "badge": ""
-    },
-    {
-      "id": "tote",
-      "name": "Tote bag",
-      "cat": "accesorios",
-      "shape": "bag",
-      "base": 150,
-      "minQty": 1,
-      "active": true,
-      "desc": "Bolsa de manta para el día a día.",
-      "mats": [
-        "lona"
-      ],
-      "colors": [
-        "blanco",
-        "negro"
-      ],
-      "useSizes": false,
-      "sizes": [],
-      "zones": [
-        {
-          "key": "frente",
-          "label": "Frente",
-          "extra": 0
-        },
-        {
-          "key": "reverso",
-          "label": "Reverso",
-          "extra": 40
-        }
-      ],
-      "photos": [],
-      "badge": ""
     }
   ],
   "settings": {
@@ -640,7 +871,6 @@ const DEFAULT_CATALOG = {
     "payMethods": [
       "Transferencia SPEI",
       "Depósito en OXXO",
-      "Tarjeta de débito o crédito",
       "Efectivo al recoger"
     ],
     "discounts": [
@@ -656,6 +886,11 @@ const DEFAULT_CATALOG = {
         "qty": 50,
         "pct": 18
       }
-    ]
+    ],
+    "instagram": "soyprintly.mx",
+    "email": "",
+    "city": "",
+    "onlinePay": true,
+    "transferPay": true
   }
 };
