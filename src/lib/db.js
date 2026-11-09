@@ -67,6 +67,14 @@ export const AUTH_ERRORS = {
 };
 
 /* ---------------- catálogo ---------------- */
+// Datos de contacto: si en la base de datos están vacíos se usan los del catálogo inicial.
+const CONTACT_KEYS = ['whatsapp', 'pickupAddress', 'city', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'legalAddress'];
+function withDefaults(st = {}) {
+  const def = CATALOGO_INICIAL.settings;
+  const out = { ...def, ...st };
+  CONTACT_KEYS.forEach((k) => { if (!out[k]) out[k] = def[k]; });
+  return out;
+}
 export function subscribeCatalog(cb, onError) {
   if (MODE === 'demo') {
     const push = () => cb({ catalog: lsGet(DEMO.cat, null) || clone(CATALOGO_INICIAL), seeded: true });
@@ -77,7 +85,7 @@ export function subscribeCatalog(cb, onError) {
   const send = () => {
     if (L.cfg === undefined || L.prods === undefined) return;
     if (!L.cfg) return cb({ catalog: clone(CATALOGO_INICIAL), seeded: false });
-    cb({ catalog: { ...L.cfg, products: [...L.prods].sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)) }, seeded: true });
+    cb({ catalog: { ...L.cfg, settings: withDefaults(L.cfg.settings), products: [...L.prods].sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)) }, seeded: true });
   };
   const u1 = onSnapshot(doc(db, 'config', 'tienda'), (s) => { L.cfg = s.exists() ? s.data() : null; send(); }, onError);
   const u2 = onSnapshot(collection(db, 'productos'), (s) => { L.prods = s.docs.map((d) => ({ ...d.data(), id: d.id })); send(); }, onError);

@@ -507,3 +507,7 @@ input[type=password]:focus{border-color:var(--accent);outline:none;box-shadow:0 
   .nav a[href="/"]{display:none}
   .order-page .code.big{font-size:26px}
 }
+.socials{display:flex;gap:8px;margin-top:4px}
+.socials a{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--ink);transition:background .2s,color .2s}
+.socials a:hover{background:var(--accent);color:var(--accent-ink)}
+.foot-in a{overflow-wrap:anywhere}

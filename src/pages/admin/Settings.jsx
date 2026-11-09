@@ -5,7 +5,7 @@ import { clone } from '../../lib/format.js';
 import { ConfirmButton } from '../../components/ui.jsx';
 import { useSaveCatalog } from './Admin.jsx';
 
-const TEXT = ['shopName', 'whatsapp', 'instagram', 'email', 'city', 'pickupAddress', 'deliveryNote', 'payNumber', 'payHolder', 'legalName', 'legalAddress', 'legalUpdated'];
+const TEXT = ['shopName', 'whatsapp', 'instagram', 'instagramUrl', 'facebook', 'facebookUrl', 'tiktok', 'tiktokUrl', 'email', 'city', 'pickupAddress', 'deliveryNote', 'payNumber', 'payHolder', 'legalName', 'legalAddress', 'legalUpdated'];
 const NUM = ['deliveryFee', 'depositPct', 'normalDays', 'rushDays', 'rushPct', 'designFee'];
 
 export default function Settings() {
@@ -22,7 +22,7 @@ export default function Settings() {
     const st = c.settings;
     TEXT.forEach((k) => { st[k] = String(s[k] ?? '').trim(); });
     NUM.forEach((k) => { st[k] = Math.max(0, Number(s[k]) || 0); });
-    st.instagram = st.instagram.replace(/^@/, '');
+    st.instagram = st.instagram.replace(/^@/, ''); st.tiktok = st.tiktok.replace(/^@/, '');
     st.onlinePay = s.onlinePay !== false; st.transferPay = s.transferPay !== false;
     st.payMethods = s.payMethodsText.split('\n').map((x) => x.trim()).filter(Boolean);
     st.discounts = s.discounts.map((d) => ({ qty: Number(d.qty), pct: Number(d.pct) })).filter((d) => d.qty > 0 && d.pct > 0).sort((a, b) => a.qty - b.qty);
@@ -35,7 +35,7 @@ export default function Settings() {
         <h3>Tienda y contacto</h3>
         <label className="f">Nombre de la tienda<input type="text" {...f('shopName')} /></label>
         <div className="row">
-          <label className="f">WhatsApp<input type="tel" placeholder="55 1234 5678" {...f('whatsapp')} /></label>
+          <label className="f">WhatsApp <span className="hint">10 dígitos</span><input type="tel" placeholder="229 174 5486" {...f('whatsapp')} /></label>
           <label className="f">Instagram<input type="text" placeholder="soyprintly.mx" {...f('instagram')} /></label>
         </div>
         <div className="row">
@@ -43,6 +43,16 @@ export default function Settings() {
           <label className="f">Ciudad<input type="text" placeholder="Ciudad de México" {...f('city')} /></label>
         </div>
         <label className="f">Dirección para recoger<input type="text" {...f('pickupAddress')} /></label>
+        <h3>Redes sociales</h3>
+        <div className="row">
+          <label className="f">Facebook (nombre)<input type="text" placeholder="Printly MX" {...f('facebook')} /></label>
+          <label className="f">Enlace de Facebook<input type="url" placeholder="https://www.facebook.com/…" {...f('facebookUrl')} /></label>
+        </div>
+        <div className="row">
+          <label className="f">Enlace de Instagram <span className="hint">opcional</span><input type="url" {...f('instagramUrl')} /></label>
+          <label className="f">TikTok<input type="text" placeholder="soyprintly.mx" {...f('tiktok')} /></label>
+        </div>
+        <label className="f">Enlace de TikTok <span className="hint">opcional</span><input type="url" {...f('tiktokUrl')} /></label>
         <div className="row">
           <label className="f">Costo de envío (MXN)<input type="number" min="0" {...f('deliveryFee')} /></label>
           <label className="f">Cobertura de envío<input type="text" {...f('deliveryNote')} /></label>

@@ -30,15 +30,45 @@ function Notice() {
   return null;
 }
 
+const ICONS = {
+  instagram: 'M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zm0 4.7a5.1 5.1 0 1 0 0 10.2 5.1 5.1 0 0 0 0-10.2zm0 8.4a3.3 3.3 0 1 1 0-6.6 3.3 3.3 0 0 1 0 6.6zm5.3-9.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z',
+  facebook: 'M14 8.5V6.6c0-.8.2-1.3 1.4-1.3H17V2.2C16.7 2.1 15.7 2 14.6 2 12.2 2 10.6 3.4 10.6 6.1v2.4H8v3.4h2.6V22H14v-10.1h2.6l.4-3.4H14z',
+  tiktok: 'M16.6 2h-3.3v13.3a2.9 2.9 0 1 1-2-2.8V9.1a6.3 6.3 0 1 0 5.3 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.7a4.6 4.6 0 0 1-4.4-4.7z'
+};
+
+export function socialLinks(st) {
+  const ig = (st.instagram || '').replace(/^@/, '');
+  const tt = (st.tiktok || '').replace(/^@/, '');
+  return [
+    ig && { k: 'instagram', label: `Instagram @${ig}`, href: st.instagramUrl || `https://www.instagram.com/${ig}` },
+    (st.facebookUrl || st.facebook) && { k: 'facebook', label: `Facebook ${st.facebook || ''}`.trim(), href: st.facebookUrl || `https://www.facebook.com/search/top?q=${encodeURIComponent(st.facebook)}` },
+    tt && { k: 'tiktok', label: `TikTok @${tt}`, href: st.tiktokUrl || `https://www.tiktok.com/@${tt}` }
+  ].filter(Boolean);
+}
+
+export function SocialIcons({ st }) {
+  return (
+    <div className="socials">
+      {socialLinks(st).map((s) => (
+        <a key={s.k} href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d={ICONS[s.k]} /></svg>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function Footer() {
   const { settings: st } = useStore();
-  const ig = (st.instagram || '').replace(/^@/, '');
+  const phone = String(st.whatsapp || '').replace(/\D/g, '');
+  const phoneLabel = phone.length === 10 ? `${phone.slice(0, 3)} ${phone.slice(3, 6)} ${phone.slice(6)}` : st.whatsapp;
   return (
     <footer className="foot">
       <div className="wrap foot-in">
         <div className="foot-brand">
           <img src="/img/logo.webp" alt="Printly" width="80" height="45" />
           <p>Estampados personalizados en playeras, sudaderas, tazas, termos, tarros y accesorios. Desde una pieza, con envíos a todo México.</p>
+          <SocialIcons st={st} />
         </div>
         <div>
           <h4>Tienda</h4>
@@ -49,10 +79,10 @@ function Footer() {
         </div>
         <div>
           <h4>Contacto</h4>
-          {st.whatsapp && <a href={waLink(st.whatsapp, 'Hola, quiero información sobre un pedido.')} target="_blank" rel="noopener">WhatsApp {st.whatsapp}</a>}
-          {ig && <a href={`https://instagram.com/${ig}`} target="_blank" rel="noopener">Instagram @{ig}</a>}
+          {st.whatsapp && <a href={waLink(st.whatsapp, 'Hola, quiero información sobre un pedido.')} target="_blank" rel="noopener">WhatsApp {phoneLabel}</a>}
           {st.email && <a href={`mailto:${st.email}`}>{st.email}</a>}
-          {st.city && <span>{st.city}</span>}
+          {st.pickupAddress && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(st.pickupAddress)}`} target="_blank" rel="noopener">{st.pickupAddress}</a>}
+          {socialLinks(st).map((s) => <a key={s.k} href={s.href} target="_blank" rel="noopener">{s.label}</a>)}
         </div>
         <div>
           <h4>Legal</h4>

@@ -857,10 +857,10 @@ export const CATALOGO_INICIAL = {
   "settings": {
     "shopName": "Printly",
     "currency": "$",
-    "whatsapp": "",
+    "whatsapp": "2291745486",
     "payNumber": "",
     "payHolder": "",
-    "pickupAddress": "",
+    "pickupAddress": "Calle 4 #940, C.P. 91720, Veracruz, Ver.",
     "deliveryFee": 99,
     "deliveryNote": "Envío local o por paquetería a todo México",
     "normalDays": 5,
@@ -889,8 +889,14 @@ export const CATALOGO_INICIAL = {
     ],
     "instagram": "soyprintly.mx",
     "email": "",
-    "city": "",
+    "city": "Veracruz, Ver.",
     "onlinePay": true,
-    "transferPay": true
+    "transferPay": true,
+    "instagramUrl": "https://www.instagram.com/soyprintly.mx",
+    "tiktok": "soyprintly.mx",
+    "tiktokUrl": "https://www.tiktok.com/@soyprintly.mx",
+    "facebook": "Printly MX",
+    "facebookUrl": "https://www.facebook.com/share/1Fn5FP3YQU/",
+    "legalAddress": "Calle 4 #940, C.P. 91720, Veracruz, Ver."
   }
 };
