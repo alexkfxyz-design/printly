@@ -166,7 +166,10 @@ let payConfig;
 export function getPayConfig() {
   const none = { mercadopago: false, paypal: false, paypalClientId: null };
   if (MODE === 'demo') return Promise.resolve(none);
-  if (!payConfig) payConfig = fetch('/api/pay-status').then((r) => r.json()).then((d) => ({ ...none, ...d })).catch(() => none);
+  // En Firebase Hosting no hay funciones de servidor: solo se consulta si el sitio corre en Netlify.
+  if (!payConfig) payConfig = /netlify\.app$/.test(location.hostname) || import.meta.env.VITE_SERVER_PAYMENTS === 'true'
+    ? fetch('/api/pay-status').then((r) => r.json()).then((d) => ({ ...none, ...d })).catch(() => none)
+    : Promise.resolve(none);
   return payConfig;
 }
 

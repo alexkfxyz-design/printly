@@ -11,6 +11,32 @@ Sin variables de Firebase el sitio arranca en **modo demo**: todo se guarda en e
 
 ---
 
+## Publicar en Firebase Hosting
+
+El sitio se aloja en Firebase, en el mismo proyecto que la base de datos (`printly-store`).
+
+**Primera vez:**
+```bash
+npm install -g firebase-tools
+firebase login
+npm run build
+firebase deploy --only hosting,firestore:rules
+```
+Queda publicado en **https://printly-store.web.app**. Ese dominio ya está autorizado para el inicio de sesión.
+
+**Cada vez que cambies algo:** `npm run build` y luego `firebase deploy --only hosting`.
+
+**Publicación automática con GitHub (opcional):**
+1. Firebase → Configuración del proyecto → Cuentas de servicio → **Generar nueva clave privada**.
+2. GitHub → repo → Settings → Secrets and variables → Actions → **New repository secret**:
+   - Nombre: `FIREBASE_SERVICE_ACCOUNT_PRINTLY_STORE`
+   - Valor: el contenido completo del `.json` descargado.
+3. Desde ahí, cada `git push` a `main` publica solo. Lo hace `.github/workflows/firebase-hosting.yml`.
+
+**Dominio propio:** Firebase → Hosting → **Agregar dominio personalizado**. Firebase indica los registros DNS. Después agrega ese dominio en Authentication → Configuración → Dominios autorizados.
+
+> Los pagos son en efectivo, por SPEI y con PayPal.me, así que no necesitan servidor y todo funciona con el plan gratuito de Firebase. Las carpetas `netlify/` solo se usan si algún día se aloja en Netlify con PayPal automático o Mercado Pago.
+
 ## Desarrollo local
 
 ```bash
